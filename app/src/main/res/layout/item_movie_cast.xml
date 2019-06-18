@@ -1,37 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/item_movie_cast"
-    android:layout_width="96dp"
-    android:layout_height="128dp"
-    android:orientation="vertical"
-    android:padding="2dp">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/civ_cast_pic"
-        android:layout_width="84dp"
-        android:layout_height="84dp"
-        android:background="@null"
-        app:civ_border_color="#FF000000"
-        app:civ_border_width="2dp" />
+    <LinearLayout
+        android:id="@+id/item_movie_cast"
+        android:layout_width="96dp"
+        android:layout_height="128dp"
+        android:orientation="vertical"
+        android:padding="2dp">
 
-    <TextView
-        android:id="@+id/tv_cast_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:maxLines="1"
-        android:textSize="14sp"
-        android:textStyle="normal"
-        tools:text="Name" />
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/civ_cast_pic"
+            android:layout_width="84dp"
+            android:layout_height="84dp"
+            android:background="@null"
+            app:civ_border_color="#FF000000"
+            app:civ_border_width="2dp" />
 
-    <TextView
-        android:id="@+id/tv_cast_character"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:maxLines="1"
-        android:textSize="14sp"
-        android:textStyle="italic"
-        tools:text="In the role of" />
-</LinearLayout>
+        <TextView
+            android:id="@+id/tv_cast_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:maxLines="1"
+            android:textSize="14sp"
+            android:textStyle="normal"
+            tools:text="Name" />
+
+        <TextView
+            android:id="@+id/tv_cast_character"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:maxLines="1"
+            android:textSize="14sp"
+            android:textStyle="italic"
+            tools:text="In the role of" />
+    </LinearLayout>
+</layout>
