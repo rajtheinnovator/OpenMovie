@@ -51,4 +51,7 @@ ext {
 
     //Paging
     paging_version = '2.1.0'
+
+    //RatingBar
+    rating_bar='0.1.5'
 }
