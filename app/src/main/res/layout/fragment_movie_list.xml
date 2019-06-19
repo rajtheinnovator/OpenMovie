@@ -7,9 +7,11 @@
         android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
+            android:layout_above="@id/bnv_menu_option"
             android:id="@+id/rv_movie_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="#ffffff"
             android:layout_gravity="center_horizontal"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:spanCount="2" />

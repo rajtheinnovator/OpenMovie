@@ -1,4 +1,4 @@
-package me.abhishekraj.openmovie.data.database
+package me.abhishekraj.openmovie.data.local
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson

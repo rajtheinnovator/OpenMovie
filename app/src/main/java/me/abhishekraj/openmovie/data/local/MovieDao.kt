@@ -1,6 +1,7 @@
-package me.abhishekraj.openmovie.data.database
+package me.abhishekraj.openmovie.data.local
 
 import androidx.lifecycle.LiveData
+import androidx.paging.DataSource
 import androidx.room.*
 import me.abhishekraj.openmovie.data.model.Movie
 
@@ -17,6 +18,9 @@ interface MovieDao {
     @Query("SELECT * FROM movietable WHERE movieType = :type ORDER BY timeAdded ASC")
     fun loadAllMoviesLiveDataByMovieType(type: String): LiveData<List<Movie>>
 
+    @Query("DELETE FROM movietable")
+    fun deleteAll()
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertMovie(movie: Movie)
 
@@ -31,4 +35,7 @@ interface MovieDao {
 
     @Query("SELECT * FROM movietable ORDER BY id")
     fun loadAllMovies(): List<Movie>
+
+    @Query("SELECT * FROM movietable WHERE movieType = :type ORDER BY timeAdded ASC")
+    fun getAllMoviePageByMovieType(type: String): DataSource.Factory<Int, Movie>
 }

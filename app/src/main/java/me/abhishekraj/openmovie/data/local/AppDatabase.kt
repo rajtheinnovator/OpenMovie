@@ -1,4 +1,4 @@
-package me.abhishekraj.openmovie.data.database
+package me.abhishekraj.openmovie.data.local
 
 import android.content.Context
 import androidx.room.Database

@@ -1,4 +1,4 @@
-package me.abhishekraj.openmovie.data.api
+package me.abhishekraj.openmovie.data.remote
 
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient

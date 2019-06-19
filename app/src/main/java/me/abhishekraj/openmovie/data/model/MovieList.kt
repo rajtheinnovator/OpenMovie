@@ -1,6 +1,7 @@
 package me.abhishekraj.openmovie.data.model
 
 import android.os.Parcelable
+import androidx.recyclerview.widget.DiffUtil
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
@@ -8,7 +9,8 @@ import androidx.room.TypeConverters
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
-import me.abhishekraj.openmovie.data.database.TypeConverterForMovieArrayList
+import me.abhishekraj.openmovie.data.local.TypeConverterForMovieArrayList
+
 
 /**
  * Created by Abhishek Raj on 6/19/2019.
@@ -84,4 +86,15 @@ class Movie(
     @SerializedName("release_date")
     @Expose
     var releaseDate: String? = null
-) : Parcelable
+) : Parcelable {
+
+    object DIFF_CALLBACK : DiffUtil.ItemCallback<Movie>() {
+        override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
+            return oldItem.id == (newItem.id)
+        }
+
+        override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean {
+            return oldItem.equals(newItem)
+        }
+    }
+}

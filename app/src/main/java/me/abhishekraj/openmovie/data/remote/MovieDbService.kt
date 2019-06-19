@@ -1,4 +1,4 @@
-package me.abhishekraj.openmovie.data.api
+package me.abhishekraj.openmovie.data.remote
 
 import me.abhishekraj.openmovie.data.model.MovieList
 import retrofit2.Call
@@ -22,8 +22,15 @@ interface MovieDbService {
      * Retrieve list of articles
      */
 
-    @GET("3/discover/movie/{movie_type}")
+    @GET("3/movie/{movie_type}")
     fun getMovieList(
+        @Path("movie_type") movieType: String,
+        @Query("api_key") apiKey: String,
+        @Query("page") pageNumber: Int
+    ): Call<MovieList>
+
+    @GET("3/discover/movie/{movie_type}")
+    fun discoverMoviesByFilters(
         @Path("movie_type") movieType: String,
         @Query("api_key") apiKey: String,
         @Query("sort_by") sortBy: String,

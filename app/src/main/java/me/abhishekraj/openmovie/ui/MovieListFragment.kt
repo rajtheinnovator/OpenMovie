@@ -10,10 +10,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import me.abhishekraj.openmovie.R
+import me.abhishekraj.openmovie.databinding.MovieListBinding
 
 /**
  * Created by Abhishek Raj on 6/19/2019.
@@ -25,7 +27,7 @@ class MovieListFragment : Fragment() {
         ViewModelProviders.of(requireActivity()).get(MovieListViewModel::class.java)
     }
 
-    private lateinit var moviesAdapter: MoviesAdapter
+    private lateinit var moviesAdapter: MoviesPagedListAdapter
     private lateinit var movieListBinding: MovieListBinding
 
 
@@ -39,7 +41,7 @@ class MovieListFragment : Fragment() {
         )
 
         //Set adapter, divider and default animator to the recycler view
-        moviesAdapter = MoviesAdapter()
+        moviesAdapter = MoviesPagedListAdapter()
         val dividerItemDecoration = DividerItemDecoration(
             requireActivity(),
             LinearLayoutManager.VERTICAL
@@ -92,7 +94,8 @@ class MovieListFragment : Fragment() {
         movieListViewModel.movieList?.observe(this, Observer { movies ->
             if (!movies.isNullOrEmpty()) {
                 moviesAdapter.movieList = movies
-                Log.d(TAG, "movies are received. list size: " + movies.size)
+                moviesAdapter.submitList(movies)
+                Log.d("my_tagr", "movies are received. list size: " + movies.size)
             }
         })
     }
