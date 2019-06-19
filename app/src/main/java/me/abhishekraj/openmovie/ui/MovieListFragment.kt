@@ -10,12 +10,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import me.abhishekraj.openmovie.R
-import me.abhishekraj.openmovie.databinding.MovieListBinding
 
 /**
  * Created by Abhishek Raj on 6/19/2019.
@@ -27,8 +25,8 @@ class MovieListFragment : Fragment() {
         ViewModelProviders.of(requireActivity()).get(MovieListViewModel::class.java)
     }
 
-    private lateinit var mAdapter: MoviesAdapter
-    private lateinit var binding: MovieListBinding
+    private lateinit var moviesAdapter: MoviesAdapter
+    private lateinit var movieListBinding: MovieListBinding
 
 
     init {
@@ -36,54 +34,64 @@ class MovieListFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = DataBindingUtil.inflate(
+        movieListBinding = DataBindingUtil.inflate(
             inflater, R.layout.app_bar_main, container, false
         )
 
         //Set adapter, divider and default animator to the recycler view
-        mAdapter = MoviesAdapter()
+        moviesAdapter = MoviesAdapter()
         val dividerItemDecoration = DividerItemDecoration(
             requireActivity(),
             LinearLayoutManager.VERTICAL
         )
-        binding.included.bnvMenuOption.setOnNavigationItemSelectedListener(object :
+        //set default movie type to be popular
+        movieListBinding.toolbar.setTitle("Popular Movies")
+        fetchMovies("popular")
+
+        movieListBinding.included.bnvMenuOption.setOnNavigationItemSelectedListener(object :
             BottomNavigationView.OnNavigationItemSelectedListener {
             override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
                 when (menuItem.getItemId()) {
                     R.id.navigation_popular -> {
-                        binding.toolbar.setTitle("Popular Movies")
+                        movieListBinding.toolbar.setTitle("Popular Movies")
+                        fetchMovies("popular")
                         return true
                     }
                     R.id.navigation_top_rated -> {
-                        binding.toolbar.setTitle("Top Rated Movies")
+                        movieListBinding.toolbar.setTitle("Top Rated Movies")
+                        fetchMovies("top_rated")
                         return true
                     }
                     else -> {
-                        binding.toolbar.setTitle("Popular Movies")
+                        movieListBinding.toolbar.setTitle("Popular Movies")
                     }
                 }
                 return false
             }
         })
-        with(binding.included.rvMovieList) {
+        with(movieListBinding.included.rvMovieList) {
             addItemDecoration(dividerItemDecoration)
             itemAnimator = DefaultItemAnimator()
-            adapter = mAdapter
+            adapter = moviesAdapter
         }
 
-        return binding.root
+        return movieListBinding.root
+    }
+
+    private fun fetchMovies(movieType: String) {
+        movieListViewModel.fetchMovies(movieType)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        //When using livedata inside binding implementation, we should specify the lifecycle owner
-        binding.lifecycleOwner = this.viewLifecycleOwner
+        //When using livedata inside movieListBinding implementation, we should specify the lifecycle owner
+        movieListBinding.lifecycleOwner = this.viewLifecycleOwner
 
         //Claim the list from the view model and observe the results
         movieListViewModel.movieList?.observe(this, Observer { movies ->
             if (!movies.isNullOrEmpty()) {
-                mAdapter.movieList = movies
+                moviesAdapter.movieList = movies
                 Log.d(TAG, "movies are received. list size: " + movies.size)
             }
         })

@@ -21,19 +21,19 @@ class MoviesRepository(val application: Application) {
     val movies: LiveData<List<Movie>?>
         get() = _movies
 
-    fun getListOfMovies() {
+    fun getListOfMovies(movieType: MutableLiveData<String>?) {
         if (thereIsConnection(application)) {
-            fetchDataFromApi()
+            fetchDataFromApi(movieType)
         } else {
-            fetchDataFromLocalDatabase()
+            fetchDataFromLocalDatabase(movieType)
         }
     }
 
-    private fun fetchDataFromLocalDatabase() {
+    private fun fetchDataFromLocalDatabase(movieType: MutableLiveData<String>?) {
         //TODO("not implemented")
     }
 
-    private fun fetchDataFromApi() {
+    private fun fetchDataFromApi(movieType: MutableLiveData<String>?) {
         //TODO("not implemented")
     }
 

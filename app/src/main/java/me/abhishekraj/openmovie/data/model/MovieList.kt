@@ -37,6 +37,8 @@ class MovieList(
 @Entity(tableName = "movietable")
 class Movie(
     @Expose(serialize = false)
+    var movieType: String = "popular",
+    @Expose(serialize = false)
     var timeAdded: Long = System.currentTimeMillis(),
     @SerializedName("vote_count")
     @Expose

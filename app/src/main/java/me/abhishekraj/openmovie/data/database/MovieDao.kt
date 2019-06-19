@@ -14,6 +14,9 @@ interface MovieDao {
     @Query("SELECT * FROM movietable ORDER BY timeAdded ASC")
     fun loadAllMoviesLiveData(): LiveData<List<Movie>>
 
+    @Query("SELECT * FROM movietable WHERE movieType = :type ORDER BY timeAdded ASC")
+    fun loadAllMoviesLiveDataByMovieType(type: String): LiveData<List<Movie>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertMovie(movie: Movie)
 
