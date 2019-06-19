@@ -1,11 +1,12 @@
-package me.abhishekraj.openmovie.data.model
+package me.abhishekraj.openmovie.data.remote
 
 import android.util.Log
 import androidx.annotation.NonNull
 import androidx.paging.PagedList
 import me.abhishekraj.openmovie.BuildConfig
 import me.abhishekraj.openmovie.data.local.MovieDao
-import me.abhishekraj.openmovie.data.remote.MovieDbService
+import me.abhishekraj.openmovie.data.model.Movie
+import me.abhishekraj.openmovie.data.model.MovieList
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -20,26 +21,21 @@ class MovieBoundaryCallback(
     private val movieType: String,
     private val sortBy: String,
     private val releaseType: String,
-    private val mExecutor: Executor, private val movieDao: MovieDao
+    private val mExecutor: Executor,
+    private val movieDao: MovieDao,
+    private var pageNumber: Int
 ) : PagedList.BoundaryCallback<Movie>() {
-
-    private var pageNumber: Int = 0
-
-    init {
-        pageNumber = 1
-    }
 
     override fun onZeroItemsLoaded() {
         super.onZeroItemsLoaded()
         movieDbService.getMovieList(movieType, BuildConfig.MOVIE_DB_API_KEY, pageNumber)
             .enqueue(object : Callback<MovieList> {
                 override fun onResponse(@NonNull call: Call<MovieList>, @NonNull response: Response<MovieList>) {
-                    Log.d("my_tag", "onZeroItemsLoaded response: " + response)
+                    Log.e("my_tags", "onZeroItemsLoaded response: " + response)
                     if (response.body() != null) {
                         mExecutor.execute(Runnable {
                             for (movie in response.body()!!.results) {
                                 movieDao.insertMovie(movie)
-                                Log.d("my_tag", "onZeroItemsLoaded movie: " + movie.originalTitle)
                             }
                         })
                     }
@@ -62,11 +58,10 @@ class MovieBoundaryCallback(
         movieDbService.getMovieList(movieType, BuildConfig.MOVIE_DB_API_KEY, pageNumber)
             .enqueue(object : Callback<MovieList> {
                 override fun onResponse(@NonNull call: Call<MovieList>, @NonNull response: Response<MovieList>) {
-                    Log.d("my_tag", "onItemAtEndLoaded onResponse called")
+                    Log.e("my_tags", "onItemAtEndLoaded onResponse: "+response)
                     if (response.body() != null) {
                         mExecutor.execute(Runnable {
                             for (movie in response.body()!!.results) {
-                                Log.d("my_tag", "onItemAtEndLoaded movie: " + movie.originalTitle)
                                 movieDao.insertMovie(movie)
                             }
                         })

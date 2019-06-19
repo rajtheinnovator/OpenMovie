@@ -10,12 +10,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import me.abhishekraj.openmovie.R
 import me.abhishekraj.openmovie.databinding.MovieListBinding
+import me.abhishekraj.openmovie.data.model.Movie
 
 /**
  * Created by Abhishek Raj on 6/19/2019.
@@ -48,7 +48,6 @@ class MovieListFragment : Fragment() {
         )
         //set default movie type to be popular
         movieListBinding.toolbar.setTitle("Popular Movies")
-        fetchMovies("popular")
 
         movieListBinding.included.bnvMenuOption.setOnNavigationItemSelectedListener(object :
             BottomNavigationView.OnNavigationItemSelectedListener {
@@ -71,17 +70,28 @@ class MovieListFragment : Fragment() {
                 return false
             }
         })
+
         with(movieListBinding.included.rvMovieList) {
-            addItemDecoration(dividerItemDecoration)
-            itemAnimator = DefaultItemAnimator()
+            itemAnimator = null
             adapter = moviesAdapter
+
         }
 
         return movieListBinding.root
     }
 
     private fun fetchMovies(movieType: String) {
-        movieListViewModel.fetchMovies(movieType)
+        moviesAdapter.movieList = ArrayList()
+        //Claim the list from the view model and observe the results
+        movieListViewModel.fetchMovies(movieType)?.observe(this, Observer { movies ->
+            if (!movies.isNullOrEmpty()) {
+                val movieList = ArrayList<Movie>()
+                movieList.addAll(movies)
+                moviesAdapter.setMovies(movieList)
+                moviesAdapter.submitList(movies)
+                Log.e("my_tag", "movies are received. list size: " + movies.size)
+            }
+        })
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -89,15 +99,7 @@ class MovieListFragment : Fragment() {
 
         //When using livedata inside movieListBinding implementation, we should specify the lifecycle owner
         movieListBinding.lifecycleOwner = this.viewLifecycleOwner
-
-        //Claim the list from the view model and observe the results
-        movieListViewModel.movieList?.observe(this, Observer { movies ->
-            if (!movies.isNullOrEmpty()) {
-                moviesAdapter.movieList = movies
-                moviesAdapter.submitList(movies)
-                Log.d("my_tagr", "movies are received. list size: " + movies.size)
-            }
-        })
+        fetchMovies("popular")
     }
 
     companion object {

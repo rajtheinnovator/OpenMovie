@@ -8,7 +8,7 @@ import androidx.paging.PagedList
 import me.abhishekraj.openmovie.data.local.AppDatabase
 import me.abhishekraj.openmovie.data.local.MovieDao
 import me.abhishekraj.openmovie.data.model.Movie
-import me.abhishekraj.openmovie.data.model.MovieBoundaryCallback
+import me.abhishekraj.openmovie.data.remote.MovieBoundaryCallback
 import me.abhishekraj.openmovie.data.remote.APIClient
 import me.abhishekraj.openmovie.data.remote.MovieDbService
 import java.util.concurrent.Executor
@@ -41,26 +41,31 @@ class MoviesRepository(val application: Application) {
     val movies: LiveData<PagedList<Movie>?>
         get() = _movies
 
-    fun getListOfMovies(movieType: MutableLiveData<String>?) {
+    fun getListOfMovies(movieType: String) {
 
     }
 
     fun getLiveDataOfPagedList(movieType: String): LiveData<PagedList<Movie>?>? {
+
         /*
         https://api.themoviedb.org/3/discover/movie?api_key=user-api-key&region=IN
         &language=hi&sort_by=popularity.desc&release_date.gte=2017-08-01&with_release_type=3|2
         */
 
+        executor?.execute{
+            movieDao?.deleteAll()
+        }
+
         val movieBoundaryCallback = MovieBoundaryCallback(
             movieDbService!!,
-            movieType, "popularity.desc", "3|2", executor!!, movieDao!!
+            movieType, "popularity.desc", "3|2", executor!!, movieDao!!, 1
         )
 
         val pagedListConfig = PagedList.Config.Builder()
-            .setEnablePlaceholders(false)
-            .setInitialLoadSizeHint(20 * 3)
+            .setEnablePlaceholders(true)
+            .setInitialLoadSizeHint(20)
             .setPageSize(20)
-            .setPrefetchDistance(10)
+            .setPrefetchDistance(3)
             .build()
         return LivePagedListBuilder(movieDao!!.getAllMoviePageByMovieType(movieType), pagedListConfig)
             .setFetchExecutor(executor!!)

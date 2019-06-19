@@ -11,16 +11,15 @@ import me.abhishekraj.openmovie.utils.thereIsConnection
 
 class MovieListViewModel(application: Application) : AndroidViewModel(application) {
 
-    var movieType: MutableLiveData<String>? = null
+    var movieType: String = "popular"
 
-    fun fetchMovies(type: String) {
+    fun fetchMovies(type: String): LiveData<PagedList<Movie>?>? {
         if (thereIsConnection(getApplication())) {
             movieList = MoviesRepository(getApplication()).getLiveDataOfPagedList(type)
         } else {
-            MoviesRepository(getApplication()).getListOfMovies(movieType)
+            MoviesRepository(getApplication()).getListOfMovies(type)
         }
-
-        MoviesRepository(getApplication()).getListOfMovies(movieType)
+        return movieList
     }
 
     var movieList: LiveData<PagedList<Movie>?>? = null

@@ -12,10 +12,10 @@ import me.abhishekraj.openmovie.data.model.Movie
 @Dao
 interface MovieDao {
 
-    @Query("SELECT * FROM movietable ORDER BY timeAdded ASC")
+    @Query("SELECT * FROM movietable")
     fun loadAllMoviesLiveData(): LiveData<List<Movie>>
 
-    @Query("SELECT * FROM movietable WHERE movieType = :type ORDER BY timeAdded ASC")
+    @Query("SELECT * FROM movietable WHERE movieType = :type")
     fun loadAllMoviesLiveDataByMovieType(type: String): LiveData<List<Movie>>
 
     @Query("DELETE FROM movietable")
@@ -36,6 +36,6 @@ interface MovieDao {
     @Query("SELECT * FROM movietable ORDER BY id")
     fun loadAllMovies(): List<Movie>
 
-    @Query("SELECT * FROM movietable WHERE movieType = :type ORDER BY timeAdded ASC")
+    @Query("SELECT * FROM movietable WHERE movieType = :type")
     fun getAllMoviePageByMovieType(type: String): DataSource.Factory<Int, Movie>
 }

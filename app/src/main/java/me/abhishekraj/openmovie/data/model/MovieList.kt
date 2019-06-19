@@ -40,8 +40,6 @@ class MovieList(
 class Movie(
     @Expose(serialize = false)
     var movieType: String = "popular",
-    @Expose(serialize = false)
-    var timeAdded: Long = System.currentTimeMillis(),
     @SerializedName("vote_count")
     @Expose
     @PrimaryKey
@@ -57,44 +55,44 @@ class Movie(
     var voteAverage: Double = 0.toDouble(),
     @SerializedName("title")
     @Expose
-    var title: String? = null,
+    var title: String? = "",
     @SerializedName("popularity")
     @Expose
     var popularity: Double = 0.toDouble(),
     @SerializedName("poster_path")
     @Expose
-    var posterPath: String? = null,
+    var posterPath: String? = "",
     @SerializedName("original_language")
     @Expose
-    var originalLanguage: String? = null,
+    var originalLanguage: String? = "",
     @SerializedName("original_title")
     @Expose
-    var originalTitle: String? = null,
+    var originalTitle: String? = "",
     @SerializedName("genre_ids")
     @Expose
     @Ignore
     var genreIds: List<Long>? = null,
     @SerializedName("backdrop_path")
     @Expose
-    var backdropPath: String? = null,
+    var backdropPath: String? = "",
     @SerializedName("adult")
     @Expose
     var isAdult: Boolean = false,
     @SerializedName("overview")
     @Expose
-    var overview: String? = null,
+    var overview: String? = "",
     @SerializedName("release_date")
     @Expose
-    var releaseDate: String? = null
+    var releaseDate: String? = ""
 ) : Parcelable {
 
     object DIFF_CALLBACK : DiffUtil.ItemCallback<Movie>() {
         override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
-            return oldItem.id == (newItem.id)
+            return oldItem.id.equals(newItem.id)
         }
 
         override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean {
-            return oldItem.equals(newItem)
+            return oldItem.originalTitle?.equals(newItem.originalTitle)!!
         }
     }
 }

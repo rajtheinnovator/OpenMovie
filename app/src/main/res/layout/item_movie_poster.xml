@@ -18,7 +18,7 @@
         android:layout_height="wrap_content">
 
         <FrameLayout
-            android:layout_width="128dp"
+            android:layout_width="match_parent"
             android:layout_height="198dp"
             android:layout_centerHorizontal="true"
             android:layout_margin="4dp">
@@ -30,7 +30,7 @@
                 android:background="#ADADAD" />
 
             <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
+                android:layout_width="140dp"
                 android:layout_height="190dp"
                 android:layout_gravity="center_horizontal"
                 app:cardCornerRadius="8dp">
