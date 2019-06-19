@@ -1,9 +1,14 @@
 package me.abhishekraj.openmovie.data.model
 
 import android.os.Parcelable
+import androidx.room.Entity
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
+import me.abhishekraj.openmovie.data.database.TypeConverterForMovieArrayList
 
 /**
  * Created by Abhishek Raj on 6/19/2019.
@@ -22,16 +27,20 @@ class MovieList(
     @Expose
     var totalPages: Long = 0,
     @Expose
+    @TypeConverters(TypeConverterForMovieArrayList::class)
     @SerializedName("results")
     var results: List<Movie> = ArrayList<Movie>()
 
 ) : Parcelable
 
 @Parcelize
+@Entity(tableName = "movietable")
 class Movie(
-
+    @Expose(serialize = false)
+    var timeAdded: Long = System.currentTimeMillis(),
     @SerializedName("vote_count")
     @Expose
+    @PrimaryKey
     var voteCount: Long = 0,
     @SerializedName("id")
     @Expose
@@ -59,6 +68,7 @@ class Movie(
     var originalTitle: String? = null,
     @SerializedName("genre_ids")
     @Expose
+    @Ignore
     var genreIds: List<Long>? = null,
     @SerializedName("backdrop_path")
     @Expose

@@ -4,5 +4,4 @@
     android:id="@+id/fl_fragment_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="10dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior" />

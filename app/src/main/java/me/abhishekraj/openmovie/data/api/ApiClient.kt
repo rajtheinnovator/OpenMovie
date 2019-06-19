@@ -1,5 +1,6 @@
 package me.abhishekraj.openmovie.data.api
 
+import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -22,7 +23,7 @@ object APIClient {
             val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
             retrofit = Retrofit.Builder()
                 .baseUrl("https://api.themoviedb.org/")
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()))
                 .client(client)
                 .build()
 

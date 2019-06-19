@@ -2,17 +2,15 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_movie_list"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:spanCount="2" />
 
@@ -20,10 +18,11 @@
             android:id="@+id/bnv_menu_option"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center_horizontal"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center_vertical|center_horizontal"
             android:background="@color/colorPrimaryLight"
             app:itemTextColor="@android:color/black"
             app:menu="@menu/movies_category_menu" />
-    </LinearLayout>
+    </RelativeLayout>
 
 </layout>

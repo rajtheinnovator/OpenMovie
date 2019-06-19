@@ -3,9 +3,11 @@
 
     <item
         android:id="@+id/navigation_popular"
+        android:icon="@drawable/popular"
         android:title="@string/title_popular" />
 
     <item
         android:id="@+id/navigation_top_rated"
+        android:icon="@drawable/top_rated"
         android:title="@string/title_top_rated" />
 </menu>

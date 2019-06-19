@@ -58,6 +58,9 @@ class MovieListFragment : Fragment() {
                         binding.toolbar.setTitle("Top Rated Movies")
                         return true
                     }
+                    else -> {
+                        binding.toolbar.setTitle("Popular Movies")
+                    }
                 }
                 return false
             }

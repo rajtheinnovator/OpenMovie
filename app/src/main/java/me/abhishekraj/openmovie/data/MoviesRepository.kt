@@ -30,11 +30,11 @@ class MoviesRepository(val application: Application) {
     }
 
     private fun fetchDataFromLocalDatabase() {
-        TODO("not implemented")
+        //TODO("not implemented")
     }
 
     private fun fetchDataFromApi() {
-        TODO("not implemented")
+        //TODO("not implemented")
     }
 
     companion object {
