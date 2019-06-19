@@ -3,46 +3,65 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <FrameLayout
-        android:layout_width="128dp"
-        android:layout_height="188dp">
+    <data class="ItemBinding">
 
-        <View
-            android:layout_width="108dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
-            android:background="#ADADAD" />
+        <variable
+            name="movie"
+            type="me.abhishekraj.openmovie.data.model.Movie" />
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="180dp"
-            android:layout_gravity="center_horizontal"
-            app:cardCornerRadius="14dp">
+        <import type="me.abhishekraj.openmovie.utils.BindingUtils" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <FrameLayout
+            android:layout_width="128dp"
+            android:layout_height="188dp"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="4dp">
+
+            <View
+                android:layout_width="108dp"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_gravity="center_horizontal"
+                android:background="#ADADAD" />
 
-                <ImageView
-                    android:id="@+id/iv_movie_poster"
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:layout_gravity="center_horizontal"
+                app:cardCornerRadius="14dp">
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="160dp"
-                    android:layout_gravity="center_horizontal"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/posterplaceholder" />
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/tv_movie_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical|center_horizontal"
-                    android:textColor="#000000"
-                    android:textSize="14sp"
-                    tools:text="Movie Name" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-    </FrameLayout>
+                    <ImageView
+                        android:id="@+id/iv_movie_poster"
+                        android:layout_width="match_parent"
+                        android:layout_height="160dp"
+                        android:layout_gravity="center_horizontal"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/posterplaceholder"
+                        app:imageSrc="@{movie.posterPath}" />
+
+                    <TextView
+                        android:id="@+id/tv_movie_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:text="@{movie.originalTitle}"
+                        android:textColor="#000000"
+                        android:textSize="14sp"
+                        tools:text="Movie Name" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </FrameLayout>
+    </RelativeLayout>
 </layout>

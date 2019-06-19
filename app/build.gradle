@@ -37,6 +37,11 @@ android {
     
 }
 
+//for handling Parcelable
+androidExtensions {
+    experimental = true
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -68,6 +73,11 @@ dependencies {
 
     //Databinding
     kapt "androidx.databinding:databinding-common:$gradle_version"
+
+    //Kotlin extensions
+    implementation 'androidx.fragment:fragment-ktx:1.0.0'
+    implementation "org.jetbrains.anko:anko-commons:$ankoVersion"
+    implementation "org.jetbrains.anko:anko-design:$ankoVersion"
 
     //Paging
     implementation "androidx.paging:paging-runtime-ktx:$paging_version"

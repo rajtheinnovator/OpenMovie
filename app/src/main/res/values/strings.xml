@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">OpenMovie</string>
+    <string name="title_top_rated">Top Rated</string>
+    <string name="title_popular">Popular</string>
 </resources>
