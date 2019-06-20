@@ -35,6 +35,7 @@ class MovieBoundaryCallback(
                     if (response.body() != null) {
                         mExecutor.execute(Runnable {
                             for (movie in response.body()!!.results) {
+                                movie.movieType = movieType
                                 movieDao.insertMovie(movie)
                             }
                         })
@@ -62,6 +63,7 @@ class MovieBoundaryCallback(
                     if (response.body() != null) {
                         mExecutor.execute(Runnable {
                             for (movie in response.body()!!.results) {
+                                movie.movieType = movieType
                                 movieDao.insertMovie(movie)
                             }
                         })

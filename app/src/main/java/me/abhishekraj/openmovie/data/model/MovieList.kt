@@ -39,7 +39,7 @@ class MovieList(
 @Entity(tableName = "movietable")
 class Movie(
     @Expose(serialize = false)
-    var movieType: String = "popular",
+    var movieType: String = "",
     @SerializedName("vote_count")
     @Expose
     @PrimaryKey

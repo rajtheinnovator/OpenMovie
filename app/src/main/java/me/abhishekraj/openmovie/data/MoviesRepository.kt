@@ -11,6 +11,7 @@ import me.abhishekraj.openmovie.data.model.Movie
 import me.abhishekraj.openmovie.data.remote.APIClient
 import me.abhishekraj.openmovie.data.remote.MovieBoundaryCallback
 import me.abhishekraj.openmovie.data.remote.MovieDbService
+import me.abhishekraj.openmovie.utils.thereIsConnection
 import java.util.concurrent.Executor
 
 
@@ -48,12 +49,8 @@ class MoviesRepository(val application: Application) {
     fun getLiveDataOfPagedList(movieType: String): LiveData<PagedList<Movie>?>? {
 
         /*
-        https://api.themoviedb.org/3/movie?api_key=user-api-key&page=1
-        */
-
-        executor?.execute{
-            movieDao?.deleteAll()
-        }
+     https://api.themoviedb.org/3/movie?api_key=user-api-key&page=1
+     */
 
         val movieBoundaryCallback = MovieBoundaryCallback(
             movieDbService!!,
@@ -66,18 +63,16 @@ class MoviesRepository(val application: Application) {
             .setPageSize(20)
             .setPrefetchDistance(3)
             .build()
+
+        if (thereIsConnection(application)) {
+            executor?.execute {
+                movieDao?.deleteAll()
+            }
+        }
         return LivePagedListBuilder(movieDao!!.getAllMoviePageByMovieType(movieType), pagedListConfig)
             .setFetchExecutor(executor!!)
             .setBoundaryCallback(movieBoundaryCallback)
             .build()
-    }
-
-    private fun fetchDataFromLocalDatabase(movieType: MutableLiveData<String>?) {
-        //TODO("not implemented")
-    }
-
-    private fun fetchDataFromApi(movieType: MutableLiveData<String>?) {
-        //TODO("not implemented")
     }
 
     companion object {
