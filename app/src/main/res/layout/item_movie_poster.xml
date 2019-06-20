@@ -9,11 +9,17 @@
             name="movie"
             type="me.abhishekraj.openmovie.data.model.Movie" />
 
+        <variable
+            name="movieItemClick"
+            type="me.abhishekraj.openmovie.ui.MoviesPagedListAdapter.MovieClickListener" />
+
+
         <import type="me.abhishekraj.openmovie.utils.BindingUtils" />
 
     </data>
 
     <RelativeLayout
+        android:onClick="@{() ->  movieItemClick.onMovieClicked(movie)}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 

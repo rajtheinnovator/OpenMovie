@@ -15,6 +15,8 @@ class MovieListViewModel(application: Application) : AndroidViewModel(applicatio
         return movieList
     }
 
+    var chosenMovie: Movie? = null
+    //private val reviewsList = MutableLiveData<List<Review>>()
     var movieList: LiveData<PagedList<Movie>?>? = null
         get() = field ?: MoviesRepository(getApplication()).movies.also {
             field = it

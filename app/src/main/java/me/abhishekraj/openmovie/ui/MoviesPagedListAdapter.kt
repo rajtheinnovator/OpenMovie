@@ -14,6 +14,7 @@ import me.abhishekraj.openmovie.databinding.ItemBinding
  */
 
 class MoviesPagedListAdapter(
+    private val movieClickListener: MovieClickListener
 ) : PagedListAdapter<Movie, RecyclerView.ViewHolder>(Movie.DIFF_CALLBACK) {
 
     var movieList = ArrayList<Movie>()
@@ -24,7 +25,7 @@ class MoviesPagedListAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) =
-        (holder as MovieViewHolder).bind(movieList?.get(position))
+        (holder as MovieViewHolder).bind(movieList?.get(position), movieClickListener)
 
     override fun getItemCount(): Int {
         //If list is null, return 0, otherwise return the size of the list
@@ -36,7 +37,11 @@ class MoviesPagedListAdapter(
 
     class MovieViewHolder(val binding: ItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(currentMovie: Movie?) {
+        fun bind(
+            currentMovie: Movie?,
+            movieClickListener: MovieClickListener
+        ) {
+            binding.movieItemClick = movieClickListener
             binding.movie = currentMovie ?: Movie()
             binding.executePendingBindings()
         }
@@ -50,6 +55,10 @@ class MoviesPagedListAdapter(
                 return MovieViewHolder(binding)
             }
         }
+    }
+
+    interface MovieClickListener {
+        fun onMovieClicked(chosenMovie: Movie)
     }
 
     companion object {

@@ -13,7 +13,7 @@ class MainActivity : AppCompatActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.transaction {
-                add(R.id.fl_fragment_container, MovieListFragment())
+                add(R.id.fl_fragment_container, MovieListFragment(), "MovieListFragment")
             }
         }
     }

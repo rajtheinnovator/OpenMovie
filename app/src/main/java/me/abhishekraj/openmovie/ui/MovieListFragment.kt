@@ -8,10 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.transaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import me.abhishekraj.openmovie.R
 import me.abhishekraj.openmovie.data.model.Movie
@@ -21,7 +20,15 @@ import me.abhishekraj.openmovie.databinding.MovieListBinding
  * Created by Abhishek Raj on 6/19/2019.
  */
 
-class MovieListFragment : Fragment() {
+class MovieListFragment : Fragment(), MoviesPagedListAdapter.MovieClickListener {
+
+    override fun onMovieClicked(chosenMovie: Movie) {
+        movieListViewModel.chosenMovie = chosenMovie
+        fragmentManager?.transaction {
+            replace(R.id.fl_fragment_container, MovieDetailsFragment())
+            addToBackStack("MovieListFragment")
+        }
+    }
 
     private val movieListViewModel: MovieListViewModel by lazy {
         ViewModelProviders.of(requireActivity()).get(MovieListViewModel::class.java)
@@ -41,11 +48,8 @@ class MovieListFragment : Fragment() {
         )
 
         //Set adapter, divider and default animator to the recycler view
-        moviesAdapter = MoviesPagedListAdapter()
-        val dividerItemDecoration = DividerItemDecoration(
-            requireActivity(),
-            LinearLayoutManager.VERTICAL
-        )
+        moviesAdapter = MoviesPagedListAdapter(this)
+
         //set default movie type to be popular
         movieListBinding.toolbar.setTitle("Popular Movies")
 
