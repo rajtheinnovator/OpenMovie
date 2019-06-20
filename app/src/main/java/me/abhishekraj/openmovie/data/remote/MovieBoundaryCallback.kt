@@ -31,7 +31,7 @@ class MovieBoundaryCallback(
         movieDbService.getMovieList(movieType, BuildConfig.MOVIE_DB_API_KEY, pageNumber)
             .enqueue(object : Callback<MovieList> {
                 override fun onResponse(@NonNull call: Call<MovieList>, @NonNull response: Response<MovieList>) {
-                    Log.e("my_tags", "onZeroItemsLoaded response: " + response)
+                    Log.e(TAG, "onZeroItemsLoaded response: " + response)
                     if (response.body() != null) {
                         mExecutor.execute(Runnable {
                             for (movie in response.body()!!.results) {
@@ -58,7 +58,7 @@ class MovieBoundaryCallback(
         movieDbService.getMovieList(movieType, BuildConfig.MOVIE_DB_API_KEY, pageNumber)
             .enqueue(object : Callback<MovieList> {
                 override fun onResponse(@NonNull call: Call<MovieList>, @NonNull response: Response<MovieList>) {
-                    Log.e("my_tags", "onItemAtEndLoaded onResponse: "+response)
+                    Log.e(TAG, "onItemAtEndLoaded onResponse: " + response)
                     if (response.body() != null) {
                         mExecutor.execute(Runnable {
                             for (movie in response.body()!!.results) {
@@ -73,5 +73,10 @@ class MovieBoundaryCallback(
                 }
             })
         pageNumber += 1
+    }
+
+
+    companion object {
+        private const val TAG = "MovieBoundaryCallback"
     }
 }

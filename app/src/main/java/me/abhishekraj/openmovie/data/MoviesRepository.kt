@@ -8,8 +8,8 @@ import androidx.paging.PagedList
 import me.abhishekraj.openmovie.data.local.AppDatabase
 import me.abhishekraj.openmovie.data.local.MovieDao
 import me.abhishekraj.openmovie.data.model.Movie
-import me.abhishekraj.openmovie.data.remote.MovieBoundaryCallback
 import me.abhishekraj.openmovie.data.remote.APIClient
+import me.abhishekraj.openmovie.data.remote.MovieBoundaryCallback
 import me.abhishekraj.openmovie.data.remote.MovieDbService
 import java.util.concurrent.Executor
 
@@ -48,8 +48,7 @@ class MoviesRepository(val application: Application) {
     fun getLiveDataOfPagedList(movieType: String): LiveData<PagedList<Movie>?>? {
 
         /*
-        https://api.themoviedb.org/3/discover/movie?api_key=user-api-key&region=IN
-        &language=hi&sort_by=popularity.desc&release_date.gte=2017-08-01&with_release_type=3|2
+        https://api.themoviedb.org/3/movie?api_key=user-api-key&page=1
         */
 
         executor?.execute{

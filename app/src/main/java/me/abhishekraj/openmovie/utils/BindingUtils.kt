@@ -14,5 +14,6 @@ fun ImageView.loadImage(url: String) {
     GlideApp.with(context)
         .load("https://image.tmdb.org/t/p/w500" + url)
         .error(R.drawable.image_not_found)
+        .placeholder(R.drawable.posterplaceholder)
         .into(this)
 }

@@ -14,8 +14,8 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import me.abhishekraj.openmovie.R
-import me.abhishekraj.openmovie.databinding.MovieListBinding
 import me.abhishekraj.openmovie.data.model.Movie
+import me.abhishekraj.openmovie.databinding.MovieListBinding
 
 /**
  * Created by Abhishek Raj on 6/19/2019.
@@ -89,7 +89,7 @@ class MovieListFragment : Fragment() {
                 movieList.addAll(movies)
                 moviesAdapter.setMovies(movieList)
                 moviesAdapter.submitList(movies)
-                Log.e("my_tag", "movies are received. list size: " + movies.size)
+                Log.d(TAG, "movies are received. list size: " + movies.size)
             }
         })
     }

@@ -19,9 +19,10 @@ class MoviesPagedListAdapter(
     var movieList = ArrayList<Movie>()
 
     fun setMovies(movies: ArrayList<Movie>) {
-        movieList.addAll( movies)
-        Log.d("my_tagr", "movieList size is: " + movieList?.size)
+        movieList = movies
+        Log.d(TAG, "movieList size is: " + movieList?.size)
     }
+
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) =
         (holder as MovieViewHolder).bind(movieList?.get(position))
 
@@ -36,7 +37,7 @@ class MoviesPagedListAdapter(
     class MovieViewHolder(val binding: ItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(currentMovie: Movie?) {
-            binding.movie = currentMovie
+            binding.movie = currentMovie ?: Movie()
             binding.executePendingBindings()
         }
 
@@ -49,5 +50,9 @@ class MoviesPagedListAdapter(
                 return MovieViewHolder(binding)
             }
         }
+    }
+
+    companion object {
+        private const val TAG = "MoviesPagedListAdapter"
     }
 }
