@@ -37,4 +37,19 @@ interface MovieDbService {
         @Query("with_release_type") releaseType: String,
         @Query("page") pageNumber: Int
     ): Call<MovieList>
+
+    /**
+     * Retrieve details of a movie
+     */
+
+    /*
+     @link" "https://api.themoviedb.org/3/movie/284052?api_key=user-api-key&append_to_response=videos,reviews"
+    * */
+
+    @GET("/3/movie/{movie_id}")
+    fun getMovieDetails(
+        @Path("movie_id") movieId: String,
+        @Query("api_key") apiKey: String,
+        @Query("append_to_response") retrieveExtraDetails: String
+    ): Call<MovieList>
 }
