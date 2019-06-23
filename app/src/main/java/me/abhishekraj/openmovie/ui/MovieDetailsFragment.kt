@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import me.abhishekraj.openmovie.R
+import me.abhishekraj.openmovie.data.model.Movie
 import me.abhishekraj.openmovie.databinding.FragmentDetailsBinding
 
 
@@ -17,7 +18,14 @@ class MovieDetailsFragment : androidx.fragment.app.Fragment() {
     private val viewModel: MovieListViewModel by lazy {
         ViewModelProviders.of(requireActivity()).get(MovieListViewModel::class.java)
     }
+
     private lateinit var binding: FragmentDetailsBinding
+    private var movie: Movie? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        movie = arguments?.getParcelable("movie")
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_details, container, false)

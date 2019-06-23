@@ -25,7 +25,11 @@ class MovieListFragment : Fragment(), MoviesPagedListAdapter.MovieClickListener 
     override fun onMovieClicked(chosenMovie: Movie) {
         movieListViewModel.chosenMovie = chosenMovie
         fragmentManager?.transaction {
-            replace(R.id.fl_fragment_container, MovieDetailsFragment())
+            val movieDetailsFragment = MovieDetailsFragment()
+            val bundle = Bundle()
+            bundle.putParcelable("movie", chosenMovie)
+            movieDetailsFragment.arguments = bundle
+            replace(R.id.fl_fragment_container, movieDetailsFragment)
             addToBackStack("MovieListFragment")
         }
     }
