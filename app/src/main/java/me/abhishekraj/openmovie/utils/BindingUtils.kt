@@ -9,10 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.iarcuschin.simpleratingbar.SimpleRatingBar
 import me.abhishekraj.openmovie.R
 
-
 /**
  * Created by Abhishek Raj on 6/19/2019.
  */
+
 @BindingAdapter("imageSrc")
 fun ImageView.loadImage(url: String) {
     GlideApp.with(context)

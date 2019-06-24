@@ -1,4 +1,4 @@
-package me.abhishekraj.openmovie.ui
+package me.abhishekraj.openmovie.ui.movielist
 
 import android.os.Bundle
 import android.util.Log
@@ -15,6 +15,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import me.abhishekraj.openmovie.R
 import me.abhishekraj.openmovie.data.model.Movie
 import me.abhishekraj.openmovie.databinding.MovieListBinding
+import me.abhishekraj.openmovie.ui.moviedetails.MovieDetailsFragment
 
 /**
  * Created by Abhishek Raj on 6/19/2019.

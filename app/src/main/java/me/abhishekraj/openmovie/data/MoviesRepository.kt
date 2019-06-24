@@ -1,17 +1,24 @@
 package me.abhishekraj.openmovie.data
 
 import android.app.Application
+import android.util.Log
+import androidx.annotation.NonNull
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
+import me.abhishekraj.openmovie.BuildConfig
 import me.abhishekraj.openmovie.data.local.AppDatabase
 import me.abhishekraj.openmovie.data.local.MovieDao
 import me.abhishekraj.openmovie.data.model.Movie
+import me.abhishekraj.openmovie.data.model.MovieDetail
 import me.abhishekraj.openmovie.data.remote.APIClient
 import me.abhishekraj.openmovie.data.remote.MovieBoundaryCallback
 import me.abhishekraj.openmovie.data.remote.MovieDbService
 import me.abhishekraj.openmovie.utils.thereIsConnection
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.concurrent.Executor
 
 
@@ -20,6 +27,8 @@ import java.util.concurrent.Executor
  */
 
 class MoviesRepository(val application: Application) {
+
+    val _movieDetails = MutableLiveData<MovieDetail>()
 
     private var movieDbService: MovieDbService? = null
     private var movieDao: MovieDao? = null
@@ -42,9 +51,8 @@ class MoviesRepository(val application: Application) {
     val movies: LiveData<PagedList<Movie>?>
         get() = _movies
 
-    fun getListOfMovies(movieType: String) {
-
-    }
+    val movieDetails: MutableLiveData<MovieDetail>
+        get() = _movieDetails
 
     fun getLiveDataOfPagedList(movieType: String): LiveData<PagedList<Movie>?>? {
 
@@ -73,6 +81,26 @@ class MoviesRepository(val application: Application) {
             .setFetchExecutor(executor!!)
             .setBoundaryCallback(movieBoundaryCallback)
             .build()
+    }
+
+    fun getMovieDetails(movieId: String): LiveData<MovieDetail> {
+        executor?.execute {
+            movieDbService?.getMovieDetails(movieId, BuildConfig.MOVIE_DB_API_KEY, "videos,reviews")
+                ?.enqueue(object : Callback<MovieDetail> {
+                    override fun onResponse(@NonNull call: Call<MovieDetail>, @NonNull response: Response<MovieDetail>) {
+                        Log.e(TAG, "getMovieDetails onResponse: " + response)
+                        if (response.body() != null) {
+                            _movieDetails.value = response.body()
+                        }
+                    }
+
+                    override fun onFailure(@NonNull call: Call<MovieDetail>, @NonNull throwable: Throwable) {
+
+                    }
+                })
+        }
+
+        return movieDetails
     }
 
     companion object {

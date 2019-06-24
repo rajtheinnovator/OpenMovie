@@ -1,5 +1,6 @@
 package me.abhishekraj.openmovie.data.remote
 
+import me.abhishekraj.openmovie.data.model.MovieDetail
 import me.abhishekraj.openmovie.data.model.MovieList
 import retrofit2.Call
 import retrofit2.http.GET
@@ -51,5 +52,5 @@ interface MovieDbService {
         @Path("movie_id") movieId: String,
         @Query("api_key") apiKey: String,
         @Query("append_to_response") retrieveExtraDetails: String
-    ): Call<MovieList>
+    ): Call<MovieDetail>
 }

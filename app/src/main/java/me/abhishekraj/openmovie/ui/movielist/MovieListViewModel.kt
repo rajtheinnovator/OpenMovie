@@ -1,4 +1,4 @@
-package me.abhishekraj.openmovie.ui
+package me.abhishekraj.openmovie.ui.movielist
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel

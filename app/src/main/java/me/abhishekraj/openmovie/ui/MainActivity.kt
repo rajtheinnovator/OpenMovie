@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.transaction
 import me.abhishekraj.openmovie.R
+import me.abhishekraj.openmovie.ui.movielist.MovieListFragment
 
 class MainActivity : AppCompatActivity() {
 

@@ -1,4 +1,4 @@
-package me.abhishekraj.openmovie.ui
+package me.abhishekraj.openmovie.ui.movielist
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

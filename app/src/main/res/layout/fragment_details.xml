@@ -20,7 +20,7 @@
 
         <variable
             name="viewModel"
-            type="me.abhishekraj.openmovie.ui.MovieListViewModel" />
+            type="me.abhishekraj.openmovie.ui.moviedetails.MovieDetailsViewModel" />
 
         <import type="me.abhishekraj.openmovie.utils.BindingUtils" />
 
