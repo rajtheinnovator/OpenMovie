@@ -24,6 +24,8 @@ class MovieDetailsFragment : Fragment() {
         ViewModelProviders.of(requireActivity()).get(MovieDetailsViewModel::class.java)
     }
 
+    private lateinit var movieReviewsAdapter: MovieReviewsAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         movie = arguments?.getParcelable("movie")
@@ -35,6 +37,13 @@ class MovieDetailsFragment : Fragment() {
         //These are for making up button work.
         (requireActivity() as AppCompatActivity).setSupportActionBar(binding.toolbarMovieDetail)
         setHasOptionsMenu(true)
+        movieReviewsAdapter = MovieReviewsAdapter()
+        with(binding.rvMovieReviews) {
+            itemAnimator = null
+
+            adapter = movieReviewsAdapter
+
+        }
 
         return binding.root
     }
@@ -49,8 +58,9 @@ class MovieDetailsFragment : Fragment() {
     private fun fetchMovieDetails(movieId: String) {
         movieDetailsViewModel.fetchMovieDetails(movieId)?.observe(this, Observer { movies ->
             if (movies != null) {
-
-                Log.d(TAG, "movie details are received. originalTitle is: " + movies.originalTitle)
+                binding.itemMovieDetail.movie = movie
+                movieReviewsAdapter.reviewResult = movies.reviews?.reviewResult
+                Log.d("my_tag", "movies.reviews?.reviewResult?.size is: " + movies.reviews?.reviewResult?.size)
             }
         })
     }
