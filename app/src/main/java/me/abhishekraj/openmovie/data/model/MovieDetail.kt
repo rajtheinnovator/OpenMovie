@@ -1,7 +1,9 @@
 package me.abhishekraj.openmovie.data.model
 
+import android.os.Parcelable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
 
 /**
@@ -197,3 +199,31 @@ class Videos(
     @Expose
     var videosResult: List<VideosResult>? = null
 )
+
+@Parcelize
+class Cast(
+    @SerializedName("cast_id")
+    @Expose
+    var castId: Long = 0,
+    @SerializedName("character")
+    @Expose
+    var character: String? = null,
+    @SerializedName("credit_id")
+    @Expose
+    var creditId: String? = null,
+    @SerializedName("gender")
+    @Expose
+    var gender: Long = 0,
+    @SerializedName("id")
+    @Expose
+    var id: Long = 0,
+    @SerializedName("name")
+    @Expose
+    var name: String? = null,
+    @SerializedName("order")
+    @Expose
+    var order: Long = 0,
+    @SerializedName("profile_path")
+    @Expose
+    var profilePath: String? = null
+) : Parcelable
