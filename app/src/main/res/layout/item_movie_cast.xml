@@ -2,6 +2,16 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data class="ItemMovieCast">
+
+        <variable
+            name="cast"
+            type="me.abhishekraj.openmovie.data.model.Cast" />
+
+        <import type="me.abhishekraj.openmovie.utils.BindingUtils" />
+
+    </data>
+
     <LinearLayout
         android:id="@+id/item_movie_cast"
         android:layout_width="96dp"
@@ -25,6 +35,7 @@
             android:maxLines="1"
             android:textSize="14sp"
             android:textStyle="normal"
+            android:text="@{cast.name}"
             tools:text="Name" />
 
         <TextView
@@ -35,6 +46,7 @@
             android:maxLines="1"
             android:textSize="14sp"
             android:textStyle="italic"
+            android:text="@{cast.character}"
             tools:text="In the role of" />
     </LinearLayout>
 </layout>
