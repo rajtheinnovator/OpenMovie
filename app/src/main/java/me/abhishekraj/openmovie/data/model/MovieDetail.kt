@@ -100,7 +100,10 @@ class MovieDetail(
     var videos: Videos? = null,
     @SerializedName("reviews")
     @Expose
-    var reviews: Reviews? = null
+    var reviews: Reviews? = null,
+    @SerializedName("credits")
+    @Expose
+    var credits: Credits? = null
 )
 
 class ProductionCompany(
@@ -201,6 +204,17 @@ class Videos(
 )
 
 @Parcelize
+class Credits(
+    @SerializedName("cast")
+    @Expose
+    var cast: List<Cast>? = null,
+    @SerializedName("crew")
+    @Expose
+    var crew: List<Crew>? = null
+
+) : Parcelable
+
+@Parcelize
 class Cast(
     @SerializedName("cast_id")
     @Expose
@@ -223,6 +237,31 @@ class Cast(
     @SerializedName("order")
     @Expose
     var order: Long = 0,
+    @SerializedName("profile_path")
+    @Expose
+    var profilePath: String? = null
+) : Parcelable
+
+@Parcelize
+class Crew(
+    @SerializedName("credit_id")
+    @Expose
+    var creditId: String? = null,
+    @SerializedName("department")
+    @Expose
+    var department: String? = null,
+    @SerializedName("gender")
+    @Expose
+    var gender: Long = 0,
+    @SerializedName("id")
+    @Expose
+    var id: Long = 0,
+    @SerializedName("job")
+    @Expose
+    var job: String? = null,
+    @SerializedName("name")
+    @Expose
+    var name: String? = null,
     @SerializedName("profile_path")
     @Expose
     var profilePath: String? = null
