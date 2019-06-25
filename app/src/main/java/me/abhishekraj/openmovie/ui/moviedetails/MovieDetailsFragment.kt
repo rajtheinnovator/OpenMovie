@@ -25,6 +25,7 @@ class MovieDetailsFragment : Fragment() {
     }
 
     private lateinit var movieReviewsAdapter: MovieReviewsAdapter
+    private lateinit var movieCastAdapter: MovieCastAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,9 +41,14 @@ class MovieDetailsFragment : Fragment() {
         movieReviewsAdapter = MovieReviewsAdapter()
         with(binding.rvMovieReviews) {
             itemAnimator = null
-
             adapter = movieReviewsAdapter
 
+        }
+
+        movieCastAdapter = MovieCastAdapter()
+        with(binding.rvMovieCast) {
+            itemAnimator = null
+            adapter = movieCastAdapter
         }
 
         return binding.root
@@ -60,6 +66,7 @@ class MovieDetailsFragment : Fragment() {
             if (movies != null) {
                 binding.itemMovieDetail.movie = movie
                 movieReviewsAdapter.reviewResult = movies.reviews?.reviewResult
+                movieCastAdapter.movieCast = movies.credits?.cast
                 Log.d("my_tag", "movies.reviews?.reviewResult?.size is: " + movies.reviews?.reviewResult?.size)
             }
         })

@@ -7,6 +7,7 @@ import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.iarcuschin.simpleratingbar.SimpleRatingBar
+import de.hdodenhof.circleimageview.CircleImageView
 import me.abhishekraj.openmovie.R
 
 /**
@@ -20,6 +21,15 @@ fun ImageView.loadImage(url: String) {
         .error(R.drawable.image_not_found)
         .placeholder(R.drawable.posterplaceholder)
         .into(this)
+}
+
+@BindingAdapter("imageSrcIntoCircularImageView")
+fun loadImageIntoCircleImageView(circleImageView: CircleImageView, url: String?) {
+    GlideApp.with(circleImageView.context)
+        .load("https://image.tmdb.org/t/p/w500" + url)
+        .error(R.drawable.image_not_found)
+        .placeholder(R.drawable.posterplaceholder)
+        .into(circleImageView)
 }
 
 @BindingAdapter("setAdapter")

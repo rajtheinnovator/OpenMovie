@@ -85,7 +85,7 @@ class MoviesRepository(val application: Application) {
 
     fun getMovieDetails(movieId: String): LiveData<MovieDetail> {
         executor?.execute {
-            movieDbService?.getMovieDetails(movieId, BuildConfig.MOVIE_DB_API_KEY, "videos,reviews")
+            movieDbService?.getMovieDetails(movieId, BuildConfig.MOVIE_DB_API_KEY, "videos,reviews,credits")
                 ?.enqueue(object : Callback<MovieDetail> {
                     override fun onResponse(@NonNull call: Call<MovieDetail>, @NonNull response: Response<MovieDetail>) {
                         Log.e(TAG, "getMovieDetails onResponse: " + response)
