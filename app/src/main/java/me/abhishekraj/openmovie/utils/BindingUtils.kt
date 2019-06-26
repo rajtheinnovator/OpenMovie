@@ -23,6 +23,15 @@ fun ImageView.loadImage(url: String) {
         .into(this)
 }
 
+@BindingAdapter("loadYoutubeThumbnail")
+fun loadYoutubeThumbnail(imageView: ImageView, url: String?) {
+    GlideApp.with(imageView.context)
+        .load("http://img.youtube.com/vi/" + url + "/0.jpg")
+        .error(R.drawable.image_not_found)
+        .placeholder(R.drawable.posterplaceholder)
+        .into(imageView)
+}
+
 @BindingAdapter("imageSrcIntoCircularImageView")
 fun loadImageIntoCircleImageView(circleImageView: CircleImageView, url: String?) {
     GlideApp.with(circleImageView.context)

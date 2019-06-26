@@ -3,6 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data class="ItemMovieTrailer">
+
+        <variable
+            name="video"
+            type="me.abhishekraj.openmovie.data.model.VideosResult" />
+
+        <import type="me.abhishekraj.openmovie.utils.BindingUtils" />
+
+    </data>
+
     <LinearLayout
         android:id="@+id/item_movie_trailer"
         android:layout_width="wrap_content"
@@ -16,7 +26,6 @@
             android:layout_width="128dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginEnd="4dp"
             app:cardCornerRadius="6dp">
 
             <LinearLayout
@@ -30,14 +39,15 @@
 
                     <ImageView
                         android:id="@+id/iv_trailer_banner"
-                        android:layout_width="128dp"
+                        android:layout_width="148dp"
                         android:layout_height="100dp"
                         android:background="#faaaaa"
-                        android:scaleType="centerCrop" />
+                        android:scaleType="centerCrop"
+                        app:loadYoutubeThumbnail="@{video.key}" />
 
                     <ImageView
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:layout_centerInParent="true"
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
@@ -48,12 +58,15 @@
 
                 <TextView
                     android:id="@+id/tv_trailer_name"
-                    android:layout_width="128dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
                     android:layout_gravity="center"
                     android:ellipsize="end"
                     android:gravity="center"
+                    android:maxLines="2"
                     android:padding="4dp"
+                    android:text="@{video.name}"
+                    android:textSize="12sp"
                     tools:text="Trailer Title" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>

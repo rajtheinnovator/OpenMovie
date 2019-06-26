@@ -109,7 +109,7 @@
                             android:layout_height="wrap_content"
                             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                             android:layout_gravity="center_horizontal"
-                            android:scrollbars="horizontal" />
+                            android:orientation="horizontal" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -137,8 +137,7 @@
                             android:paddingStart="16dp"
                             android:orientation="horizontal"
                             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                            android:paddingEnd="16dp"
-                            android:scrollbars="horizontal" />
+                            android:paddingEnd="16dp" />
                     </LinearLayout>
 
                     <LinearLayout

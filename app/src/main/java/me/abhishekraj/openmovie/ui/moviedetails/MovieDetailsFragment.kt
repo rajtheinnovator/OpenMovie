@@ -1,7 +1,6 @@
 package me.abhishekraj.openmovie.ui.moviedetails
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -26,6 +25,7 @@ class MovieDetailsFragment : Fragment() {
 
     private lateinit var movieReviewsAdapter: MovieReviewsAdapter
     private lateinit var movieCastAdapter: MovieCastAdapter
+    private lateinit var movieTrailerAdapter: MovieTrailerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +51,11 @@ class MovieDetailsFragment : Fragment() {
             adapter = movieCastAdapter
         }
 
+        movieTrailerAdapter = MovieTrailerAdapter()
+        with(binding.rvMovieTrailers) {
+            itemAnimator = null
+            adapter = movieTrailerAdapter
+        }
         return binding.root
     }
 
@@ -67,7 +72,7 @@ class MovieDetailsFragment : Fragment() {
                 binding.itemMovieDetail.movie = movie
                 movieReviewsAdapter.reviewResult = movies.reviews?.reviewResult
                 movieCastAdapter.movieCast = movies.credits?.cast
-                Log.d("my_tag", "movies.reviews?.reviewResult?.size is: " + movies.reviews?.reviewResult?.size)
+                movieTrailerAdapter.movieTrailer = movies.videos?.videosResult
             }
         })
     }
