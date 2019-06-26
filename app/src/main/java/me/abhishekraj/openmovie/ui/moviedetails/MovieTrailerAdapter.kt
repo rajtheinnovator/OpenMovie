@@ -7,12 +7,13 @@ import androidx.recyclerview.widget.RecyclerView
 import me.abhishekraj.openmovie.R
 import me.abhishekraj.openmovie.data.model.VideosResult
 import me.abhishekraj.openmovie.databinding.ItemMovieTrailer
+import java.util.*
 
 /**
  * Created by Abhishek Raj on 6/26/2019.
  */
 
-class MovieTrailerAdapter() :
+class MovieTrailerAdapter(private val trailerClickListener: TrailerClickListener) :
     RecyclerView.Adapter<MovieTrailerAdapter.MovieTrailerViewHolder>() {
 
     var movieTrailer: List<VideosResult>? = null
@@ -25,7 +26,7 @@ class MovieTrailerAdapter() :
         MovieTrailerViewHolder.from(parent)
 
     override fun onBindViewHolder(holder: MovieTrailerViewHolder, position: Int) =
-        holder.bind(movieTrailer?.get(position))
+        holder.bind(movieTrailer?.get(position), trailerClickListener, movieTrailer)
 
     override fun getItemCount(): Int {
         //If list is null, return 0, otherwise return the size of the list
@@ -33,8 +34,14 @@ class MovieTrailerAdapter() :
     }
 
     class MovieTrailerViewHolder(val binding: ItemMovieTrailer) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(currentVideo: VideosResult?) {
+        fun bind(
+            currentVideo: VideosResult?,
+            trailerClickListener: TrailerClickListener,
+            movieTrailerList: List<VideosResult>?
+        ) {
+            binding.trailerItemClick = trailerClickListener
             binding.video = currentVideo
+            binding.videoList = movieTrailerList as ArrayList<VideosResult>?
             binding.executePendingBindings()
         }
 
@@ -47,5 +54,9 @@ class MovieTrailerAdapter() :
                 return MovieTrailerViewHolder(binding)
             }
         }
+    }
+
+    interface TrailerClickListener {
+        fun onTrailerClicked(clickedTrailer: VideosResult, movieTrailer: ArrayList<VideosResult>?)
     }
 }

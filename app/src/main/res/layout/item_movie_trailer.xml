@@ -5,12 +5,21 @@
 
     <data class="ItemMovieTrailer">
 
+        <import type="java.util.ArrayList" />
+
         <variable
             name="video"
             type="me.abhishekraj.openmovie.data.model.VideosResult" />
 
+        <variable
+            name="videoList"
+            type="ArrayList&lt;me.abhishekraj.openmovie.data.model.VideosResult>" />
+
         <import type="me.abhishekraj.openmovie.utils.BindingUtils" />
 
+        <variable
+            name="trailerItemClick"
+            type="me.abhishekraj.openmovie.ui.moviedetails.MovieTrailerAdapter.TrailerClickListener" />
     </data>
 
     <LinearLayout
@@ -19,6 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="4dp"
         android:gravity="center_horizontal"
+        android:onClick="@{() ->  trailerItemClick.onTrailerClicked(video, videoList)}"
         android:orientation="vertical"
         android:paddingTop="2dp">
 

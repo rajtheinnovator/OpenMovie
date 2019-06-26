@@ -8,15 +8,29 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.transaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import me.abhishekraj.openmovie.R
 import me.abhishekraj.openmovie.data.model.Movie
+import me.abhishekraj.openmovie.data.model.VideosResult
 import me.abhishekraj.openmovie.databinding.FragmentDetailsBinding
 
-class MovieDetailsFragment : Fragment() {
+class MovieDetailsFragment : Fragment(), MovieTrailerAdapter.TrailerClickListener {
 
-    private lateinit var binding: FragmentDetailsBinding
+    override fun onTrailerClicked(clickedTrailer: VideosResult, movieTrailer: ArrayList<VideosResult>?) {
+        fragmentManager?.transaction {
+            val movieDetailsFragment = MovieTrailerPlayerFragment()
+            val bundle = Bundle()
+            bundle.putParcelable("selectedVideo", clickedTrailer)
+            bundle.putParcelableArrayList("videos", movieTrailer)
+            movieDetailsFragment.arguments = bundle
+            replace(R.id.fl_fragment_container, movieDetailsFragment)
+            addToBackStack("MovieListFragment")
+        }
+    }
+
+    private lateinit var fragmentDetailsBinding: FragmentDetailsBinding
     private var movie: Movie? = null
 
     private val movieDetailsViewModel: MovieDetailsViewModel by lazy {
@@ -33,46 +47,50 @@ class MovieDetailsFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_details, container, false)
+        fragmentDetailsBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_details, container, false)
 
         //These are for making up button work.
-        (requireActivity() as AppCompatActivity).setSupportActionBar(binding.toolbarMovieDetail)
+        (requireActivity() as AppCompatActivity).setSupportActionBar(fragmentDetailsBinding.toolbarMovieDetail)
         setHasOptionsMenu(true)
         movieReviewsAdapter = MovieReviewsAdapter()
-        with(binding.rvMovieReviews) {
+        with(fragmentDetailsBinding.rvMovieReviews) {
             itemAnimator = null
             adapter = movieReviewsAdapter
 
         }
 
         movieCastAdapter = MovieCastAdapter()
-        with(binding.rvMovieCast) {
+        with(fragmentDetailsBinding.rvMovieCast) {
             itemAnimator = null
             adapter = movieCastAdapter
         }
 
-        movieTrailerAdapter = MovieTrailerAdapter()
-        with(binding.rvMovieTrailers) {
+        movieTrailerAdapter = MovieTrailerAdapter(this)
+        with(fragmentDetailsBinding.rvMovieTrailers) {
             itemAnimator = null
             adapter = movieTrailerAdapter
         }
-        return binding.root
+        return fragmentDetailsBinding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        //Get an instance of view model and pass it to the binding implementation
-        binding.viewModel = movieDetailsViewModel
+        //Get an instance of view model and pass it to the fragmentDetailsBinding implementation
+        fragmentDetailsBinding.viewModel = movieDetailsViewModel
         fetchMovieDetails(movie?.id.toString())
     }
 
     private fun fetchMovieDetails(movieId: String) {
-        movieDetailsViewModel.fetchMovieDetails(movieId)?.observe(this, Observer { movies ->
-            if (movies != null) {
-                binding.itemMovieDetail.movie = movie
-                movieReviewsAdapter.reviewResult = movies.reviews?.reviewResult
-                movieCastAdapter.movieCast = movies.credits?.cast
-                movieTrailerAdapter.movieTrailer = movies.videos?.videosResult
+        movieDetailsViewModel.fetchMovieDetails(movieId)?.observe(this, Observer { movieDetails ->
+            if (movieDetails != null) {
+                fragmentDetailsBinding.movieDetail = movieDetails
+                fragmentDetailsBinding.movie = movie
+                fragmentDetailsBinding.itemMovieDetail.movieDetail = movieDetails
+                fragmentDetailsBinding.itemMovieDetail.movie = movie
+                fragmentDetailsBinding.viewModel = movieDetailsViewModel
+                movieReviewsAdapter.reviewResult = movieDetails.reviews?.reviewResult
+                movieCastAdapter.movieCast = movieDetails.credits?.cast
+                movieTrailerAdapter.movieTrailer = movieDetails.videos?.videosResult
             }
         })
     }

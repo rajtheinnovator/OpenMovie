@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <variable
             name="viewModel"
             type="me.abhishekraj.openmovie.ui.moviedetails.MovieDetailsViewModel" />
+
+        <variable
+            name="movieDetail"
+            type="me.abhishekraj.openmovie.data.model.MovieDetail" />
+
+        <variable
+            name="movie"
+            type="me.abhishekraj.openmovie.data.model.Movie" />
 
         <import type="me.abhishekraj.openmovie.utils.BindingUtils" />
 
@@ -41,21 +50,45 @@
                     android:layout_height="match_parent"
                     android:fitsSystemWindows="true"
                     android:scaleType="centerCrop"
+                    app:imageSrc="@{movieDetail.backdropPath}"
                     app:layout_collapseMode="parallax" />
 
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar_movie_detail"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
+                    app:contentInsetEnd="0dp"
+                    app:contentInsetStart="0dp"
                     app:layout_collapseMode="pin"
                     app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
-                    <ImageButton
-                        android:id="@+id/ib_back"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@null"
-                        android:src="@drawable/back" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageButton
+                            android:id="@+id/ib_back"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_gravity="center"
+                            android:background="@null"
+                            android:scaleType="centerInside"
+                            android:src="@drawable/back" />
+
+                        <TextView
+                            android:id="@+id/tv_toolbar_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="8dp"
+                            android:gravity="center_vertical"
+                            android:text="@{movie.originalTitle}"
+                            android:textColor="#000000"
+                            android:textSize="20sp"
+                            tools:text="Movie Title" />
+                    </LinearLayout>
                 </androidx.appcompat.widget.Toolbar>
             </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>
@@ -107,9 +140,9 @@
                             android:id="@+id/rv_movie_trailers"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                             android:layout_gravity="center_horizontal"
-                            android:orientation="horizontal" />
+                            android:orientation="horizontal"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -128,16 +161,13 @@
                             android:textColor="#000000"
                             android:textSize="14sp" />
 
-
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/rv_movie_cast"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_gravity="center_horizontal"
-                            android:paddingStart="16dp"
                             android:orientation="horizontal"
-                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                            android:paddingEnd="16dp" />
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -161,9 +191,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_gravity="center_horizontal"
-                            android:paddingStart="16dp"
+                            android:paddingStart="4dp"
+                            android:paddingEnd="4dp"
                             android:scrollbars="vertical"
-                            android:paddingEnd="16dp"
                             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
                         <TextView

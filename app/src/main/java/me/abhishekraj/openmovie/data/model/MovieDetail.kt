@@ -130,6 +130,7 @@ class ProductionCountry(
     var name: String? = null
 )
 
+@Parcelize
 class VideosResult(
     @SerializedName("id")
     @Expose
@@ -155,7 +156,7 @@ class VideosResult(
     @SerializedName("type")
     @Expose
     var type: String? = null
-)
+) : Parcelable
 
 class ReviewResult(
     @SerializedName("author")
