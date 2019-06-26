@@ -96,7 +96,7 @@ class MovieListFragment : Fragment(), MoviesPagedListAdapter.MovieClickListener 
             if (!movies.isNullOrEmpty()) {
                 val movieList = ArrayList<Movie>()
                 movieList.addAll(movies)
-                moviesAdapter.setMovies(movieList)
+                moviesAdapter.movieList = movieList
                 moviesAdapter.submitList(movies)
                 Log.d(TAG, "movies are received. list size: " + movies.size)
             }

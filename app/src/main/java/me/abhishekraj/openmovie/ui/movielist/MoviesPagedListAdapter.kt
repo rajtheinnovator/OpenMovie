@@ -1,6 +1,5 @@
 package me.abhishekraj.openmovie.ui.movielist
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -18,11 +17,9 @@ class MoviesPagedListAdapter(
 ) : PagedListAdapter<Movie, RecyclerView.ViewHolder>(Movie.DIFF_CALLBACK) {
 
     var movieList = ArrayList<Movie>()
-
-    fun setMovies(movies: ArrayList<Movie>) {
-        movieList = movies
-        Log.d(TAG, "movieList size is: " + movieList?.size)
-    }
+        set(value) {
+            field = value
+        }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) =
         (holder as MovieViewHolder).bind(movieList?.get(position), movieClickListener)

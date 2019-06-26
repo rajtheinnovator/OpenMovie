@@ -46,12 +46,7 @@ class MoviesRepository(val application: Application) {
     prefer to pass an immutable live data to the UI layer
     */
 
-    private var _movies = MutableLiveData<PagedList<Movie>?>()
-
-    val movies: LiveData<PagedList<Movie>?>
-        get() = _movies
-
-    val movieDetails: MutableLiveData<MovieDetail>
+    val movieDetails: LiveData<MovieDetail>
         get() = _movieDetails
 
     fun getLiveDataOfPagedList(movieType: String): LiveData<PagedList<Movie>?>? {
@@ -59,6 +54,12 @@ class MoviesRepository(val application: Application) {
         /*
      https://api.themoviedb.org/3/movie?api_key=user-api-key&page=1
      */
+
+        if (thereIsConnection(application)) {
+            executor?.execute {
+                movieDao?.deleteAllByType(movieType)
+            }
+        }
 
         val movieBoundaryCallback = MovieBoundaryCallback(
             movieDbService!!,
@@ -69,14 +70,9 @@ class MoviesRepository(val application: Application) {
             .setEnablePlaceholders(true)
             .setInitialLoadSizeHint(20)
             .setPageSize(20)
-            .setPrefetchDistance(3)
+            .setPrefetchDistance(0)
             .build()
 
-        if (thereIsConnection(application)) {
-            executor?.execute {
-                movieDao?.deleteAll()
-            }
-        }
         return LivePagedListBuilder(movieDao!!.getAllMoviePageByMovieType(movieType), pagedListConfig)
             .setFetchExecutor(executor!!)
             .setBoundaryCallback(movieBoundaryCallback)

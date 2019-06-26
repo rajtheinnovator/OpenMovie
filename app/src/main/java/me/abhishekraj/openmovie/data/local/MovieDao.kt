@@ -21,6 +21,9 @@ interface MovieDao {
     @Query("DELETE FROM movietable")
     fun deleteAll()
 
+    @Query("DELETE FROM movietable WHERE movieType = :type")
+    fun deleteAllByType(type: String)
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertMovie(movie: Movie)
 
