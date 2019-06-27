@@ -19,6 +19,14 @@
 
         <import type="me.abhishekraj.openmovie.utils.BindingUtils" />
 
+        <import type="me.abhishekraj.openmovie.utils.UIState" />
+
+        <import type="androidx.lifecycle.LiveData" />
+
+        <variable
+            name="uiState"
+            type="LiveData&lt;UIState>" />
+
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -75,7 +83,7 @@
                             android:layout_gravity="center"
                             android:background="@null"
                             android:scaleType="centerInside"
-                            android:src="@drawable/back" />
+                            app:srcCompat="@drawable/back" />
 
                         <TextView
                             android:id="@+id/tv_toolbar_title"
@@ -126,7 +134,8 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:paddingStart="16dp"
-                        android:paddingEnd="16dp">
+                        android:paddingEnd="16dp"
+                        app:visible="@{uiState == UIState.SUCCESS}">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -151,7 +160,8 @@
                         android:layout_marginTop="8dp"
                         android:orientation="vertical"
                         android:paddingStart="16dp"
-                        android:paddingEnd="16dp">
+                        android:paddingEnd="16dp"
+                        app:visible="@{uiState == UIState.SUCCESS}">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -176,7 +186,8 @@
                         android:layout_marginTop="8dp"
                         android:orientation="vertical"
                         android:paddingStart="16dp"
-                        android:paddingEnd="16dp">
+                        android:paddingEnd="16dp"
+                        app:visible="@{uiState == UIState.SUCCESS}">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -218,7 +229,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_centerInParent="true"
-                    android:layout_gravity="center_horizontal|center" />
+                    android:layout_gravity="center_horizontal|center"
+                    app:visible="@{uiState == UIState.LOADING}" />
             </RelativeLayout>
         </androidx.core.widget.NestedScrollView>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
