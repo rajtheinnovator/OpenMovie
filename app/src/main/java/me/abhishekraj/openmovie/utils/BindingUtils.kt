@@ -74,6 +74,7 @@ fun updateDuration(textView: TextView, runtime: Long) {
     textView.setText(movieDurationString)
 }
 
+
 @BindingAdapter("visible")
 fun View.setVisible(visible: Boolean) {
     visibility = if (visible) View.VISIBLE else View.GONE

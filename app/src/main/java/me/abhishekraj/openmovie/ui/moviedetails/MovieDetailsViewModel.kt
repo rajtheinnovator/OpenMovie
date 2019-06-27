@@ -32,7 +32,6 @@ class MovieDetailsViewModel(application: Application) : AndroidViewModel(applica
         _uiState.value = newState
     }
 
-
     init {
         _uiState.value = UIState.LOADING
     }

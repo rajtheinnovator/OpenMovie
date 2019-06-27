@@ -79,14 +79,13 @@ class MovieDetailsFragment : Fragment(), MovieTrailerAdapter.TrailerClickListene
         //Get an instance of view model and pass it to the fragmentDetailsBinding implementation
         fragmentDetailsBinding.viewModel = movieDetailsViewModel
 
-        //Get the view model instance and pass it to the binding implementation
-        fragmentDetailsBinding.uiState = movieDetailsViewModel.uiState
         fetchMovieDetails(movie?.id.toString())
     }
 
     private fun fetchMovieDetails(movieId: String) {
         movieDetailsViewModel.fetchMovieDetails(movieId)?.observe(this, Observer { movieDetails ->
             if (movieDetails != null) {
+                movieDetailsViewModel.setUiState(UIState.SUCCESS)
                 fragmentDetailsBinding.movieDetail = movieDetails
                 fragmentDetailsBinding.movie = movie
                 fragmentDetailsBinding.itemMovieDetail.movieDetail = movieDetails
@@ -95,7 +94,6 @@ class MovieDetailsFragment : Fragment(), MovieTrailerAdapter.TrailerClickListene
                 movieReviewsAdapter.reviewResult = movieDetails.reviews?.reviewResult
                 movieCastAdapter.movieCast = movieDetails.credits?.cast
                 movieTrailerAdapter.movieTrailer = movieDetails.videos?.videosResult
-                movieDetailsViewModel.setUiState(UIState.SUCCESS)
             }
         })
     }
