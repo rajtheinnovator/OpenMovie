@@ -69,3 +69,19 @@ where `your_movie_db_api_key` is the api key that you can get after signing up o
 * [Part 1: Simple Ways To Stab With Dagger 2 ( Scenario )](https://medium.com/@laaptu9/part-1-simple-ways-to-stab-with-dagger-2-scenario-50b376751293)
 * [Santosh Dhakal's medium](https://medium.com/@laaptu9)
 * [That Missing Guide: How to use Dagger2](https://medium.com/@Zhuinden/that-missing-guide-how-to-use-dagger2-ef116fbea97)
+
+## NetworkBoundResource:
+
+* [https://github.com/AkshayChordiya/android-arch-news-sample/blob/master/app/src/main/java/com/akshay/newsapp/repo/NewsRepository.kt](https://github.com/AkshayChordiya/android-arch-news-sample/blob/master/app/src/main/java/com/akshay/newsapp/repo/NewsRepository.kt)
+* [https://stackoverflow.com/questions/46923289/networkboundresource-helper-class-without-room](https://stackoverflow.com/questions/46923289/networkboundresource-helper-class-without-room)
+* [https://proandroiddev.com/build-an-app-with-offline-support-exposing-network-states-1e09e138b1ed](https://proandroiddev.com/build-an-app-with-offline-support-exposing-network-states-1e09e138b1ed)
+* [https://proandroiddev.com/building-modern-apps-using-the-android-architecture-guidelines-3238fff96f14](https://proandroiddev.com/building-modern-apps-using-the-android-architecture-guidelines-3238fff96f14)
+* [https://medium.com/ideas-by-idean/android-adventure-512bbd78b05f](https://medium.com/ideas-by-idean/android-adventure-512bbd78b05f)
+* [https://android.jlelse.eu/new-android-architecture-components-in-action-creating-a-restaurants-map-application-with-room-b6c7096d80d5](https://android.jlelse.eu/new-android-architecture-components-in-action-creating-a-restaurants-map-application-with-room-b6c7096d80d5)
+* [https://developer.android.com/jetpack/docs/guide#addendum](https://developer.android.com/jetpack/docs/guide#addendum)
+* [https://github.com/googlesamples/android-architecture-components/blob/88747993139224a4bb6dbe985adf652d557de621/GithubBrowserSample/app/src/main/java/com/android/example/github/repository/NetworkBoundResource.kt](https://github.com/googlesamples/android-architecture-components/blob/88747993139224a4bb6dbe985adf652d557de621/GithubBrowserSample/app/src/main/java/com/android/example/github/repository/NetworkBoundResource.kt)
+* [https://www.prolificinteractive.com/2019/02/22/the-power-of-livedata-kotlin-sealed-classes/](https://www.prolificinteractive.com/2019/02/22/the-power-of-livedata-kotlin-sealed-classes/)
+* [https://gist.github.com/quentin41500/f93978d97f5008cde387db19ce5e2ef6](https://gist.github.com/quentin41500/f93978d97f5008cde387db19ce5e2ef6)
+* [https://medium.com/@trionkidnapper/issuing-commands-from-a-viewmodel-using-kotlin-sealed-classes-f1bbab7d4979](https://medium.com/@trionkidnapper/issuing-commands-from-a-viewmodel-using-kotlin-sealed-classes-f1bbab7d4979)
+* [https://proandroiddev.com/how-not-to-use-sealed-classes-and-livedata-for-state-management-4bfcaf314e96](https://proandroiddev.com/how-not-to-use-sealed-classes-and-livedata-for-state-management-4bfcaf314e96)
+* [https://android.jlelse.eu/networkboundresource-with-rxjava-and-kotlin-sealed-classes-1574bc516f82](https://android.jlelse.eu/networkboundresource-with-rxjava-and-kotlin-sealed-classes-1574bc516f82)
