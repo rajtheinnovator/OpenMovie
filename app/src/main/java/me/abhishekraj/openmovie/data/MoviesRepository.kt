@@ -1,19 +1,19 @@
 package me.abhishekraj.openmovie.data
 
 import android.app.Application
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.annotation.NonNull
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.paging.LivePagedListBuilder
-import androidx.paging.PagedList
 import me.abhishekraj.openmovie.BuildConfig
 import me.abhishekraj.openmovie.data.local.AppDatabase
 import me.abhishekraj.openmovie.data.local.MovieDao
 import me.abhishekraj.openmovie.data.model.Movie
 import me.abhishekraj.openmovie.data.model.MovieDetail
+import me.abhishekraj.openmovie.data.model.MovieList
 import me.abhishekraj.openmovie.data.remote.APIClient
-import me.abhishekraj.openmovie.data.remote.MovieBoundaryCallback
 import me.abhishekraj.openmovie.data.remote.MovieDbService
 import me.abhishekraj.openmovie.utils.thereIsConnection
 import retrofit2.Call
@@ -23,64 +23,88 @@ import java.util.concurrent.Executor
 
 
 /**
- * Created by Abhishek Raj on 6/19/2019.
+ * Created by Abhishek Raj on 8/10/2019.
  */
 
-class MoviesRepository(val application: Application) {
+object MoviesRepository {
 
-    val _movieDetails = MutableLiveData<MovieDetail>()
+    private val _movieDetails = MutableLiveData<MovieDetail>()
+    var application: Application? = null
+    var moviesRepository: MoviesRepository? = null
 
     private var movieDbService: MovieDbService? = null
     private var movieDao: MovieDao? = null
-    private var executor: Executor? = null
-
-    init {
-        movieDao = AppDatabase.getInstance(application).movieDao()
-        //create the service
-        movieDbService = APIClient.client.create<MovieDbService>(MovieDbService::class.java)
-        executor = AppExecutors.instance.diskIO
-    }
+    private var diskExecutor: Executor? = null
+    private var networkExecutor: Executor? = null
 
     /*
     We need a mutable live data here, so that we can modify it, but we
     prefer to pass an immutable live data to the UI layer
     */
 
+    val _moviesList = MutableLiveData<List<Movie>>()
+
     val movieDetails: LiveData<MovieDetail>
         get() = _movieDetails
 
-    fun getLiveDataOfPagedList(movieType: String): LiveData<PagedList<Movie>?>? {
+    val moviesListLiveData: LiveData<List<Movie>>
+        get() = _moviesList
 
+    fun getInstance(application: Application): MoviesRepository {
+        this.application = application
+        if (moviesRepository == null) {
+            moviesRepository = MoviesRepository
+            movieDao = AppDatabase.getInstance(application).movieDao()
+            //create the service
+            movieDbService = APIClient.client.create(MovieDbService::class.java)
+            diskExecutor = AppExecutors.instance.diskIO
+            networkExecutor = AppExecutors.instance.networkIO
+        }
+        return moviesRepository!!
+    }
+
+    fun fetchLiveDataOfMovieList(movieType: String) {
         /*
-     https://api.themoviedb.org/3/movie?api_key=user-api-key&page=1
-     */
+        https://api.themoviedb.org/3/movie?api_key=user-api-key&page=1
+        */
 
-        if (thereIsConnection(application)) {
-            executor?.execute {
-                movieDao?.deleteAllByType(movieType)
+        if (thereIsConnection(application!!)) {
+            networkExecutor?.execute {
+                movieDbService!!.getMovieList(movieType, BuildConfig.MOVIE_DB_API_KEY, 1)
+                    .enqueue(object : Callback<MovieList> {
+                        override fun onResponse(@NonNull call: Call<MovieList>, @NonNull response: Response<MovieList>) {
+                            if (response.body() != null) {
+                                _moviesList.value = response.body()!!.results
+                                Log.e("my_tag", "repo _moviesList: " + response.body()!!.results.size)
+                                diskExecutor?.execute {
+                                    movieDao?.deleteAllByType(movieType)
+                                    for (movie in response.body()!!.results) {
+                                        movie.movieType = movieType
+                                        movieDao!!.insertMovie(movie)
+                                    }
+                                }
+                            }
+                        }
+
+                        override fun onFailure(@NonNull call: Call<MovieList>, @NonNull throwable: Throwable) {
+
+                        }
+                    })
+            }
+        } else {
+            diskExecutor!!.execute {
+                val data = movieDao?.loadAllMoviesListDataByMovieType(movieType)
+                Handler(Looper.getMainLooper()).post {
+                    _moviesList.value = data
+                }
             }
         }
 
-        val movieBoundaryCallback = MovieBoundaryCallback(
-            movieDbService!!,
-            movieType, "popularity.desc", "3|2", executor!!, movieDao!!, 1
-        )
-
-        val pagedListConfig = PagedList.Config.Builder()
-            .setEnablePlaceholders(true)
-            .setInitialLoadSizeHint(20)
-            .setPageSize(20)
-            .setPrefetchDistance(0)
-            .build()
-
-        return LivePagedListBuilder(movieDao!!.getAllMoviePageByMovieType(movieType), pagedListConfig)
-            .setFetchExecutor(executor!!)
-            .setBoundaryCallback(movieBoundaryCallback)
-            .build()
     }
 
-    fun getMovieDetails(movieId: String): LiveData<MovieDetail> {
-        executor?.execute {
+
+    fun getMovieDetails(movieId: String) {
+        diskExecutor?.execute {
             movieDbService?.getMovieDetails(movieId, BuildConfig.MOVIE_DB_API_KEY, "videos,reviews,credits")
                 ?.enqueue(object : Callback<MovieDetail> {
                     override fun onResponse(@NonNull call: Call<MovieDetail>, @NonNull response: Response<MovieDetail>) {
@@ -95,12 +119,7 @@ class MoviesRepository(val application: Application) {
                     }
                 })
         }
-
-        return movieDetails
     }
 
-    companion object {
-        private const val TAG = "MoviesRepository"
-    }
-
+    private const val TAG = "MoviesRepository"
 }
