@@ -1,6 +1,7 @@
 package me.abhishekraj.openmovie.data.model
 
 import android.os.Parcelable
+import androidx.annotation.NonNull
 import androidx.recyclerview.widget.DiffUtil
 import androidx.room.Entity
 import androidx.room.Ignore
@@ -94,5 +95,12 @@ class Movie(
         override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean {
             return oldItem.originalTitle?.equals(newItem.originalTitle)!!
         }
+    }
+
+    operator fun compareTo(@NonNull o: Any): Int {
+        val compare = o as Movie
+        return if (compare.id.equals(this.id) && compare.originalTitle.equals(this.originalTitle)) {
+            0
+        } else 1
     }
 }

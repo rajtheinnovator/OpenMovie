@@ -3,26 +3,28 @@ package me.abhishekraj.openmovie.ui.movielist
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.paging.PagedListAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import me.abhishekraj.openmovie.R
 import me.abhishekraj.openmovie.data.model.Movie
 import me.abhishekraj.openmovie.databinding.ItemBinding
 
 /**
- * Created by Abhishek Raj on 6/20/2019.
+ * Created by Abhishek Raj on 8/9/2019.
  */
 
-class MoviesPagedListAdapter(
+class MoviesListAdapter(
     private val movieClickListener: MovieClickListener
-) : PagedListAdapter<Movie, RecyclerView.ViewHolder>(Movie.DIFF_CALLBACK) {
+) : RecyclerView.Adapter<MoviesListAdapter.MovieViewHolder>() {
+
+    override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
+        holder.bind(movieList.get(position), movieClickListener)
+    }
 
     var movieList = ArrayList<Movie>()
         set(value) {
             field = value
         }
-
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) =
-        (holder as MovieViewHolder).bind(movieList?.get(position), movieClickListener)
 
     override fun getItemCount(): Int {
         //If list is null, return 0, otherwise return the size of the list
@@ -38,7 +40,7 @@ class MoviesPagedListAdapter(
             currentMovie: Movie?,
             movieClickListener: MovieClickListener
         ) {
-            // binding.movieItemClick = movieClickListener
+            binding.movieItemClick = movieClickListener
             binding.movie = currentMovie ?: Movie()
             binding.executePendingBindings()
         }
@@ -47,7 +49,7 @@ class MoviesPagedListAdapter(
             fun from(parent: ViewGroup): MovieViewHolder {
                 val binding = DataBindingUtil.inflate<ItemBinding>(
                     LayoutInflater.from(parent.context),
-                    me.abhishekraj.openmovie.R.layout.item_movie_poster, parent, false
+                    R.layout.item_movie_poster, parent, false
                 )
                 return MovieViewHolder(binding)
             }
@@ -58,7 +60,14 @@ class MoviesPagedListAdapter(
         fun onMovieClicked(chosenMovie: Movie)
     }
 
+    fun onNewData(newData: ArrayList<Movie>) {
+        val diffResult = DiffUtil.calculateDiff(MyDiffUtilCallback(newData, movieList))
+        movieList.clear()
+        movieList.addAll(newData)
+        diffResult.dispatchUpdatesTo(this)
+    }
+
     companion object {
-        private const val TAG = "MoviesPagedListAdapter"
+        private const val TAG = "MoviesListAdapter"
     }
 }

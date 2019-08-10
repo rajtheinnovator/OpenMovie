@@ -83,7 +83,7 @@ class MovieDetailsFragment : Fragment(), MovieTrailerAdapter.TrailerClickListene
     }
 
     private fun fetchMovieDetails(movieId: String) {
-        movieDetailsViewModel.fetchMovieDetails(movieId)?.observe(this, Observer { movieDetails ->
+        movieDetailsViewModel.fetchMovieDetails(movieId)?.observe(viewLifecycleOwner, Observer { movieDetails ->
             if (movieDetails != null) {
                 movieDetailsViewModel.setUiState(UIState.SUCCESS)
                 fragmentDetailsBinding.movieDetail = movieDetails

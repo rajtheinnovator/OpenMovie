@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import me.abhishekraj.openmovie.data.MoviesRepository
+import me.abhishekraj.openmovie.data.MoviesRepositoryWithoutPagedList
 import me.abhishekraj.openmovie.data.model.MovieDetail
 import me.abhishekraj.openmovie.utils.UIState
 
@@ -15,14 +15,12 @@ import me.abhishekraj.openmovie.utils.UIState
 class MovieDetailsViewModel(application: Application) : AndroidViewModel(application) {
 
     fun fetchMovieDetails(movieId: String): LiveData<MovieDetail>? {
-        movieDetail = MoviesRepository(getApplication()).getMovieDetails(movieId)
+        MoviesRepositoryWithoutPagedList.getInstance(getApplication()).getMovieDetails(movieId)
         return movieDetail
     }
 
     var movieDetail: LiveData<MovieDetail>? = null
-        get() = field ?: MoviesRepository(getApplication()).movieDetails.also {
-            field = it
-        }
+        get() = field ?: MoviesRepositoryWithoutPagedList.getInstance(getApplication()).movieDetails
 
     private val _uiState: MutableLiveData<UIState> = MutableLiveData()
     val uiState: LiveData<UIState>

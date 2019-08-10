@@ -22,19 +22,19 @@ abstract class AppDatabase : RoomDatabase() {
         private val LOG_TAG = AppDatabase::class.java.simpleName
         private val LOCK = Any()
         private val DATABASE_NAME = "moviedatabase.db"
-        private var sInstance: AppDatabase? = null
+        private var instance: AppDatabase? = null
 
         fun getInstance(context: Context): AppDatabase {
-            if (sInstance == null) {
+            if (instance == null) {
                 synchronized(LOCK) {
-                    sInstance = Room.databaseBuilder(
+                    instance = Room.databaseBuilder(
                         context.getApplicationContext(),
                         AppDatabase::class.java, AppDatabase.DATABASE_NAME
                     )
                         .build()
                 }
             }
-            return sInstance!!
+            return instance!!
         }
     }
 }

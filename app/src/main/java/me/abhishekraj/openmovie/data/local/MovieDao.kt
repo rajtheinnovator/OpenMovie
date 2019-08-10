@@ -18,6 +18,9 @@ interface MovieDao {
     @Query("SELECT * FROM movietable WHERE movieType = :type")
     fun loadAllMoviesLiveDataByMovieType(type: String): LiveData<List<Movie>>
 
+    @Query("SELECT * FROM movietable WHERE movieType = :type")
+    fun loadAllMoviesListDataByMovieType(type: String): List<Movie>
+
     @Query("DELETE FROM movietable")
     fun deleteAll()
 

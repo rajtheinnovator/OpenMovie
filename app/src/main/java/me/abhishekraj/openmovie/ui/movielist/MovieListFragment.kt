@@ -1,7 +1,6 @@
 package me.abhishekraj.openmovie.ui.movielist
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -21,7 +20,7 @@ import me.abhishekraj.openmovie.ui.moviedetails.MovieDetailsFragment
  * Created by Abhishek Raj on 6/19/2019.
  */
 
-class MovieListFragment : Fragment(), MoviesPagedListAdapter.MovieClickListener {
+class MovieListFragment : Fragment(), MoviesListAdapter.MovieClickListener {
 
     override fun onMovieClicked(chosenMovie: Movie) {
         movieListViewModel.chosenMovie = chosenMovie
@@ -39,7 +38,7 @@ class MovieListFragment : Fragment(), MoviesPagedListAdapter.MovieClickListener 
         ViewModelProviders.of(requireActivity()).get(MovieListViewModel::class.java)
     }
 
-    private lateinit var moviesAdapter: MoviesPagedListAdapter
+    private lateinit var moviesAdapter: MoviesListAdapter
     private lateinit var movieListBinding: MovieListBinding
 
 
@@ -53,7 +52,7 @@ class MovieListFragment : Fragment(), MoviesPagedListAdapter.MovieClickListener 
         )
 
         //Set adapter, divider and default animator to the recycler view
-        moviesAdapter = MoviesPagedListAdapter(this)
+        moviesAdapter = MoviesListAdapter(this)
 
         //set default movie type to be popular
         movieListBinding.toolbar.setTitle("Popular Movies")
@@ -92,13 +91,12 @@ class MovieListFragment : Fragment(), MoviesPagedListAdapter.MovieClickListener 
     private fun fetchMovies(movieType: String) {
         moviesAdapter.movieList = ArrayList()
         //Claim the list from the view model and observe the results
-        movieListViewModel.fetchMovies(movieType)?.observe(this, Observer { movies ->
+        movieListViewModel.fetchMovies(movieType)?.observe(viewLifecycleOwner, Observer { movies ->
             if (!movies.isNullOrEmpty()) {
                 val movieList = ArrayList<Movie>()
                 movieList.addAll(movies)
-                moviesAdapter.movieList = movieList
-                moviesAdapter.submitList(movies)
-                Log.d(TAG, "movies are received. list size: " + movies.size)
+                //moviesAdapter.movieList = movieList
+                moviesAdapter.onNewData(movieList)
             }
         })
     }
