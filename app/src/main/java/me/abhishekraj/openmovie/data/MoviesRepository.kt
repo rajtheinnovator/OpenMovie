@@ -36,6 +36,7 @@ object MoviesRepository {
     private var movieDao: MovieDao? = null
     private var diskExecutor: Executor? = null
     private var networkExecutor: Executor? = null
+    private var mainExecutor: Executor? = null
 
     /*
     We need a mutable live data here, so that we can modify it, but we
@@ -59,6 +60,7 @@ object MoviesRepository {
             movieDbService = APIClient.client.create(MovieDbService::class.java)
             diskExecutor = AppExecutors.instance.diskIO
             networkExecutor = AppExecutors.instance.networkIO
+            mainExecutor = AppExecutors.instance.mainThread
         }
         return moviesRepository!!
     }
@@ -100,6 +102,37 @@ object MoviesRepository {
             }
         }
 
+    }
+
+    fun loadListOfMovies(movieType: String): LiveData<Resource<List<Movie>>> {
+        return object : NetworkBoundResource<List<Movie>, List<Movie>>(
+            AppExecutors(
+                diskExecutor!!,
+                networkExecutor!!,
+                mainExecutor!!
+            )
+        ) {
+            override fun saveCallResult(item: List<Movie>) {
+                diskExecutor?.execute {
+                    movieDao?.deleteAllByType(movieType)
+                    for (movie in item) {
+                        movie.movieType = movieType
+                        movieDao!!.insertMovie(movie)
+                    }
+                }
+            }
+
+            override fun shouldFetch(data: List<Movie>?): Boolean {
+                return thereIsConnection(application!!)
+            }
+
+            override fun loadFromDb() = movieDao?.loadAllMoviesLiveDataByMovieType(movieType)!!
+
+            override fun createCall(): LiveData<ApiResponse<List<Movie>>> =
+                movieDbService?.getMovieListResponse(movieType, BuildConfig.MOVIE_DB_API_KEY, 1)!!
+
+            override fun onFetchFailed() {}
+        }.asLiveData()
     }
 
 

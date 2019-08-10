@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import me.abhishekraj.openmovie.data.MoviesRepository
+import me.abhishekraj.openmovie.data.Resource
 import me.abhishekraj.openmovie.data.model.Movie
 
 class MovieListViewModel(application: Application) : AndroidViewModel(application) {
@@ -15,6 +16,11 @@ class MovieListViewModel(application: Application) : AndroidViewModel(applicatio
     fun fetchMovies(type: String): LiveData<List<Movie>>? {
         MoviesRepository.getInstance(getApplication()).fetchLiveDataOfMovieList(type)
         return moviesList
+    }
+
+
+    fun fetchMoviesResource(type: String): LiveData<Resource<List<Movie>>> {
+        return MoviesRepository.getInstance(getApplication()).loadListOfMovies(type)
     }
 
     var chosenMovie: Movie? = null

@@ -90,15 +90,30 @@ class MovieListFragment : Fragment(), MoviesListAdapter.MovieClickListener {
 
     private fun fetchMovies(movieType: String) {
         moviesAdapter.movieList = ArrayList()
+//        //Claim the list from the view model and observe the results
+//        movieListViewModel.fetchMovies(movieType)?.observe(viewLifecycleOwner, Observer { movies ->
+//            if (!movies.isNullOrEmpty()) {
+//                val movieList = ArrayList<Movie>()
+//                movieList.addAll(movies)
+//                //moviesAdapter.movieList = movieList
+//                moviesAdapter.onNewData(movieList)
+//            }
+//        })
+
+
         //Claim the list from the view model and observe the results
-        movieListViewModel.fetchMovies(movieType)?.observe(viewLifecycleOwner, Observer { movies ->
-            if (!movies.isNullOrEmpty()) {
-                val movieList = ArrayList<Movie>()
-                movieList.addAll(movies)
-                //moviesAdapter.movieList = movieList
-                moviesAdapter.onNewData(movieList)
+        movieListViewModel.fetchMoviesResource(movieType)?.observe(
+            viewLifecycleOwner,
+            Observer { resource ->
+                val movies = resource.data
+                if (!movies.isNullOrEmpty()) {
+                    val movieList = ArrayList<Movie>()
+                    movieList.addAll(movies)
+                    moviesAdapter.onNewData(movieList)
+                }
             }
-        })
+        )
+
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
