@@ -67,7 +67,12 @@ object MoviesRepository {
         /*
         https://api.themoviedb.org/3/movie?api_key=user-api-key&page=1
         */
-
+        diskExecutor!!.execute {
+            val data = movieDao?.loadAllMoviesListDataByMovieType(movieType)
+            Handler(Looper.getMainLooper()).post {
+                _moviesList.value = data
+            }
+        }
         if (thereIsConnection(application!!)) {
             networkExecutor?.execute {
                 movieDbService!!.getMovieList(movieType, BuildConfig.MOVIE_DB_API_KEY, 1)
@@ -90,13 +95,6 @@ object MoviesRepository {
 
                         }
                     })
-            }
-        } else {
-            diskExecutor!!.execute {
-                val data = movieDao?.loadAllMoviesListDataByMovieType(movieType)
-                Handler(Looper.getMainLooper()).post {
-                    _moviesList.value = data
-                }
             }
         }
 

@@ -15,6 +15,7 @@ import me.abhishekraj.openmovie.R
 import me.abhishekraj.openmovie.data.model.Movie
 import me.abhishekraj.openmovie.data.model.VideosResult
 import me.abhishekraj.openmovie.databinding.FragmentDetailsBinding
+import me.abhishekraj.openmovie.ui.movielist.MovieListFragment
 import me.abhishekraj.openmovie.utils.UIState
 
 class MovieDetailsFragment : Fragment(), MovieTrailerAdapter.TrailerClickListener {
@@ -41,10 +42,12 @@ class MovieDetailsFragment : Fragment(), MovieTrailerAdapter.TrailerClickListene
     private lateinit var movieReviewsAdapter: MovieReviewsAdapter
     private lateinit var movieCastAdapter: MovieCastAdapter
     private lateinit var movieTrailerAdapter: MovieTrailerAdapter
+    private var title: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         movie = arguments?.getParcelable("movie")
+        title = arguments?.getString("title")
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -53,6 +56,18 @@ class MovieDetailsFragment : Fragment(), MovieTrailerAdapter.TrailerClickListene
         //These are for making up button work.
         (requireActivity() as AppCompatActivity).setSupportActionBar(fragmentDetailsBinding.toolbarMovieDetail)
         setHasOptionsMenu(true)
+
+        fragmentDetailsBinding.ibBack.setOnClickListener {
+            fragmentManager?.transaction {
+                val movieListFragment = MovieListFragment()
+                val bundle = Bundle()
+                bundle.putString("title", title)
+                movieListFragment.arguments = bundle
+                replace(R.id.fl_fragment_container, movieListFragment)
+                addToBackStack("null")
+            }
+        }
+
         movieReviewsAdapter = MovieReviewsAdapter()
         with(fragmentDetailsBinding.rvMovieReviews) {
             itemAnimator = null
