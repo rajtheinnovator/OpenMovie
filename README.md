@@ -69,3 +69,9 @@ where `your_movie_db_api_key` is the api key that you can get after signing up o
 * [Part 1: Simple Ways To Stab With Dagger 2 ( Scenario )](https://medium.com/@laaptu9/part-1-simple-ways-to-stab-with-dagger-2-scenario-50b376751293)
 * [Santosh Dhakal's medium](https://medium.com/@laaptu9)
 * [That Missing Guide: How to use Dagger2](https://medium.com/@Zhuinden/that-missing-guide-how-to-use-dagger2-ef116fbea97)
+
+### Extension Functions:
+
+  - [https://antonioleiva.com/extension-functions-kotlin/](https://antonioleiva.com/extension-functions-kotlin/)
+  - [https://proandroiddev.com/organize-kotlins-extension-functions-992e3f5cd90d](https://proandroiddev.com/organize-kotlins-extension-functions-992e3f5cd90d)
+  
