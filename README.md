@@ -75,3 +75,8 @@ where `your_movie_db_api_key` is the api key that you can get after signing up o
   - [https://antonioleiva.com/extension-functions-kotlin/](https://antonioleiva.com/extension-functions-kotlin/)
   - [https://proandroiddev.com/organize-kotlins-extension-functions-992e3f5cd90d](https://proandroiddev.com/organize-kotlins-extension-functions-992e3f5cd90d)
   
+### Generics:
+ 
+  - [https://www.baeldung.com/kotlin-generics](https://www.baeldung.com/kotlin-generics)  
+  - [https://journaldev.com/20454/kotlin-generics](https://journaldev.com/20454/kotlin-generics)
+  - []
