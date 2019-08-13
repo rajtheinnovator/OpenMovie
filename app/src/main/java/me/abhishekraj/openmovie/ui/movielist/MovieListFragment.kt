@@ -28,6 +28,7 @@ class MovieListFragment : Fragment(), MoviesListAdapter.MovieClickListener {
             val movieDetailsFragment = MovieDetailsFragment()
             val bundle = Bundle()
             bundle.putParcelable("movie", chosenMovie)
+            bundle.putString("title", movieListBinding.toolbar.title.toString())
             movieDetailsFragment.arguments = bundle
             replace(R.id.fl_fragment_container, movieDetailsFragment)
             addToBackStack("MovieListFragment")
@@ -40,10 +41,15 @@ class MovieListFragment : Fragment(), MoviesListAdapter.MovieClickListener {
 
     private lateinit var moviesAdapter: MoviesListAdapter
     private lateinit var movieListBinding: MovieListBinding
-
+    private var title: String? = null
 
     init {
         retainInstance = true
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        title = arguments?.getString("title")
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -54,8 +60,22 @@ class MovieListFragment : Fragment(), MoviesListAdapter.MovieClickListener {
         //Set adapter, divider and default animator to the recycler view
         moviesAdapter = MoviesListAdapter(this)
 
-        //set default movie type to be popular
-        movieListBinding.toolbar.setTitle("Popular Movies")
+        if (title == null) {
+            //set default movie type to be popular
+            movieListBinding.toolbar.setTitle("Popular Movies")
+            title = "Popular Movies"
+        } else {
+            movieListBinding.toolbar.setTitle(title)
+            if (title.equals("Popular Movies")) {
+                title = "Popular Movies"
+                movieListBinding.included.bnvMenuOption.menu.findItem(R.id.navigation_popular).isChecked = true
+                fetchMovies("popular")
+            } else {
+                title = "Top Rated Movies"
+                movieListBinding.included.bnvMenuOption.menu.findItem(R.id.navigation_top_rated).isChecked = true
+                fetchMovies("top_rated")
+            }
+        }
 
         movieListBinding.included.bnvMenuOption.setOnNavigationItemSelectedListener(object :
             BottomNavigationView.OnNavigationItemSelectedListener {
