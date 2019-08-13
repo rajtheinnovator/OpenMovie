@@ -36,24 +36,24 @@ object MoviesRepository {
     private var movieDao: MovieDao? = null
     private var diskExecutor: Executor? = null
     private var networkExecutor: Executor? = null
-    private var mainExecutor: Executor? = null
+    private lateinit var appExecutors: AppExecutors
 
     /*
     We need a mutable live data here, so that we can modify it, but we
     prefer to pass an immutable live data to the UI layer
     */
 
-    val _moviesList = MutableLiveData<List<Movie>>()
+    val _listOfMovie = MutableLiveData<List<Movie>>()
 
-    val _movieListLive = MutableLiveData<MovieList>()
-    val movieListLive: LiveData<MovieList>
-        get() = _movieListLive
+    val _movieListMutableLiveData = MutableLiveData<MovieList>()
+    val movieListLiveData: LiveData<MovieList>
+        get() = _movieListMutableLiveData
 
     val movieDetails: LiveData<MovieDetail>
         get() = _movieDetails
 
-    val moviesListLiveData: LiveData<List<Movie>>
-        get() = _moviesList
+    val liveDataOfListOfMovie: LiveData<List<Movie>>
+        get() = _listOfMovie
 
     fun getInstance(application: Application): MoviesRepository {
         this.application = application
@@ -61,11 +61,10 @@ object MoviesRepository {
             moviesRepository = MoviesRepository
             movieDao = AppDatabase.getInstance(application).movieDao()
             //create the service
+            appExecutors = AppExecutors.instance
             movieDbService = APIClient.client.create(MovieDbService::class.java)
-
             diskExecutor = AppExecutors.instance.diskIO
             networkExecutor = AppExecutors.instance.networkIO
-            mainExecutor = AppExecutors.instance.mainThread
         }
         return moviesRepository!!
     }
@@ -77,7 +76,7 @@ object MoviesRepository {
         diskExecutor!!.execute {
             val data = movieDao?.loadAllMoviesListDataByMovieType(movieType)
             Handler(Looper.getMainLooper()).post {
-                _moviesList.value = data
+                _listOfMovie.value = data
             }
         }
         if (thereIsConnection(application!!)) {
@@ -86,8 +85,8 @@ object MoviesRepository {
                     .enqueue(object : Callback<MovieList> {
                         override fun onResponse(@NonNull call: Call<MovieList>, @NonNull response: Response<MovieList>) {
                             if (response.body() != null) {
-                                _moviesList.value = response.body()!!.results
-                                Log.e("my_tag", "repo _moviesList: " + response.body()!!.results.size)
+                                _listOfMovie.value = response.body()!!.results
+                                Log.e("my_tag", "repo _listOfMovie: " + response.body()!!.results.size)
                                 diskExecutor?.execute {
                                     movieDao?.deleteAllByType(movieType)
                                     for (movie in response.body()!!.results) {
@@ -107,17 +106,13 @@ object MoviesRepository {
 
     }
 
+
     fun loadListOfMovies(movieType: String): LiveData<Resource<MovieList>> {
         return object : NetworkBoundResource<MovieList, MovieList>(
-            AppExecutors(
-                diskExecutor!!,
-                networkExecutor!!,
-                mainExecutor!!
-            )
+            appExecutors
         ) {
             override fun saveCallResult(item: MovieList) {
-                movieDao?.deleteAllByType(movieType)
-                for (movie in item?.results) {
+                for (movie in item.results) {
                     movie.movieType = movieType
                     movieDao!!.insertMovie(movie)
                 }
@@ -142,12 +137,14 @@ object MoviesRepository {
         diskExecutor?.execute {
             val movieList = MovieList()
             val movieListFromDatabase = movieDao?.loadAllMoviesListDataByMovieType(movieType)
-            movieList.results = movieListFromDatabase!!
+            if (movieListFromDatabase != null) {
+                movieList.results = movieListFromDatabase
+            }
             Handler(Looper.getMainLooper()).post {
-                _movieListLive.value = movieList
+                _movieListMutableLiveData.value = movieList
             }
         }
-        return movieListLive
+        return movieListLiveData
     }
 
     fun getMovieDetails(movieId: String) {

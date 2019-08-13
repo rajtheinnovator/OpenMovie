@@ -110,9 +110,8 @@ class MovieListFragment : Fragment(), MoviesListAdapter.MovieClickListener {
 
     private fun fetchMovies(movieType: String) {
         moviesAdapter.movieList = ArrayList()
-
         //Claim the list from the view model and observe the results
-        movieListViewModel.fetchMoviesResource(movieType)?.observe(
+        movieListViewModel.fetchMoviesResource(movieType).observe(
             viewLifecycleOwner,
             Observer { resource ->
                 val movies = resource.data?.results
@@ -123,7 +122,6 @@ class MovieListFragment : Fragment(), MoviesListAdapter.MovieClickListener {
                 }
             }
         )
-
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

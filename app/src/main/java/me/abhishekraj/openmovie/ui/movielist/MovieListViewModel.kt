@@ -12,13 +12,12 @@ class MovieListViewModel(application: Application) : AndroidViewModel(applicatio
 
 
     val moviesList: LiveData<List<Movie>>?
-        get() = MoviesRepository.getInstance(getApplication()).moviesListLiveData
+        get() = MoviesRepository.getInstance(getApplication()).liveDataOfListOfMovie
 
     fun fetchMovies(type: String): LiveData<List<Movie>>? {
         MoviesRepository.getInstance(getApplication()).fetchLiveDataOfMovieList(type)
         return moviesList
     }
-
 
     fun fetchMoviesResource(type: String): LiveData<Resource<MovieList>> {
         return MoviesRepository.getInstance(getApplication()).loadListOfMovies(type)
