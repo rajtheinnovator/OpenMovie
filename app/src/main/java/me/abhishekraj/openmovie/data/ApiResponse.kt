@@ -27,7 +27,7 @@ sealed class ApiResponse<T> {
                 } else {
                     ApiSuccessResponse(
                         body = body,
-                        linkHeader = response.headers()?.get("link")
+                        linkHeader = response.headers().get("link")
                     )
                 }
             } else {
@@ -44,7 +44,7 @@ sealed class ApiResponse<T> {
 }
 
 /**
- * separate class for HTTP 204 responses so that we can make ApiSuccessResponse's body non-null.
+ * separate class for HTTP 204 resposes so that we can make ApiSuccessResponse's body non-null.
  */
 class ApiEmptyResponse<T> : ApiResponse<T>()
 
@@ -66,7 +66,7 @@ data class ApiSuccessResponse<T>(
                 try {
                     Integer.parseInt(matcher.group(1))
                 } catch (ex: NumberFormatException) {
-                    Log.e("my_tag", "cannot parse next page from %s " + next)
+                    Log.w("tag", "cannot parse next page from %s$next")
                     null
                 }
             }

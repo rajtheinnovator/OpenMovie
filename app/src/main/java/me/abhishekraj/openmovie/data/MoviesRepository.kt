@@ -45,6 +45,10 @@ object MoviesRepository {
 
     val _moviesList = MutableLiveData<List<Movie>>()
 
+    val _movieListLive = MutableLiveData<MovieList>()
+    val movieListLive: LiveData<MovieList>
+        get() = _movieListLive
+
     val movieDetails: LiveData<MovieDetail>
         get() = _movieDetails
 
@@ -58,6 +62,7 @@ object MoviesRepository {
             movieDao = AppDatabase.getInstance(application).movieDao()
             //create the service
             movieDbService = APIClient.client.create(MovieDbService::class.java)
+
             diskExecutor = AppExecutors.instance.diskIO
             networkExecutor = AppExecutors.instance.networkIO
             mainExecutor = AppExecutors.instance.mainThread
@@ -104,37 +109,48 @@ object MoviesRepository {
 
     }
 
-    fun loadListOfMovies(movieType: String): LiveData<Resource<List<Movie>>> {
-        return object : NetworkBoundResource<List<Movie>, List<Movie>>(
+    fun loadListOfMovies(movieType: String): LiveData<Resource<MovieList>> {
+        return object : NetworkBoundResource<MovieList, MovieList>(
             AppExecutors(
                 diskExecutor!!,
                 networkExecutor!!,
                 mainExecutor!!
             )
         ) {
-            override fun saveCallResult(item: List<Movie>) {
-                diskExecutor?.execute {
-                    movieDao?.deleteAllByType(movieType)
-                    for (movie in item) {
-                        movie.movieType = movieType
-                        movieDao!!.insertMovie(movie)
-                    }
+            override fun saveCallResult(item: MovieList) {
+                movieDao?.deleteAllByType(movieType)
+                for (movie in item?.results) {
+                    movie.movieType = movieType
+                    movieDao!!.insertMovie(movie)
                 }
             }
 
-            override fun shouldFetch(data: List<Movie>?): Boolean {
+            override fun shouldFetch(data: MovieList?): Boolean {
                 return thereIsConnection(application!!)
             }
 
-            override fun loadFromDb() = movieDao?.loadAllMoviesLiveDataByMovieType(movieType)!!
+            override fun loadFromDb() = getMovieListLiveData(movieType)
 
-            override fun createCall(): LiveData<ApiResponse<List<Movie>>> =
+            override fun createCall() =
                 movieDbService?.getMovieListResponse(movieType, BuildConfig.MOVIE_DB_API_KEY, 1)!!
 
-            override fun onFetchFailed() {}
+            override fun onFetchFailed() {
+                getMovieListLiveData(movieType)
+            }
         }.asLiveData()
     }
 
+    private fun getMovieListLiveData(movieType: String): LiveData<MovieList> {
+        diskExecutor?.execute {
+            val movieList = MovieList()
+            val movieListFromDatabase = movieDao?.loadAllMoviesListDataByMovieType(movieType)
+            movieList.results = movieListFromDatabase!!
+            Handler(Looper.getMainLooper()).post {
+                _movieListLive.value = movieList
+            }
+        }
+        return movieListLive
+    }
 
     fun getMovieDetails(movieId: String) {
         diskExecutor?.execute {

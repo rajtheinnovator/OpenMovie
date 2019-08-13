@@ -9,15 +9,23 @@ import androidx.lifecycle.MediatorLiveData
  * Created by Abhishek Raj on 8/10/2019.
  */
 
-// ResultType: Type for the Resource data.
-// RequestType: Type for the API response.
+/**
+ * A generic class that can provide a resource backed by both the sqlite database and the network.
+ *
+ *
+ * You can read more about it in the [Architecture
+ * Guide](https://developer.android.com/arch).
+ * @param <ResultType>
+ * @param <RequestType>
+</RequestType></ResultType> */
+
 abstract class NetworkBoundResource<ResultType, RequestType>
 @MainThread constructor(private val appExecutors: AppExecutors) {
 
     private val result = MediatorLiveData<Resource<ResultType>>()
 
     init {
-        result.value = Resource.Loading(null)
+        result.value = Resource.loading(null)
         @Suppress("LeakingThis")
         val dbSource = loadFromDb()
         result.addSource(dbSource) { data ->
@@ -26,7 +34,7 @@ abstract class NetworkBoundResource<ResultType, RequestType>
                 fetchFromNetwork(dbSource)
             } else {
                 result.addSource(dbSource) { newData ->
-                    setValue(Resource.Success(newData))
+                    setValue(Resource.success(newData))
                 }
             }
         }
@@ -43,7 +51,7 @@ abstract class NetworkBoundResource<ResultType, RequestType>
         val apiResponse = createCall()
         // we re-attach dbSource as a new source, it will dispatch its latest value quickly
         result.addSource(dbSource) { newData ->
-            setValue(Resource.Loading(newData))
+            setValue(Resource.loading(newData))
         }
         result.addSource(apiResponse) { response ->
             result.removeSource(apiResponse)
@@ -57,7 +65,7 @@ abstract class NetworkBoundResource<ResultType, RequestType>
                             // otherwise we will get immediately last cached value,
                             // which may not be updated with latest results received from network.
                             result.addSource(loadFromDb()) { newData ->
-                                setValue(Resource.Success(newData))
+                                setValue(Resource.success(newData))
                             }
                         }
                     }
@@ -66,23 +74,21 @@ abstract class NetworkBoundResource<ResultType, RequestType>
                     appExecutors.mainThread.execute {
                         // reload from disk whatever we had
                         result.addSource(loadFromDb()) { newData ->
-                            setValue(Resource.Success(newData))
+                            setValue(Resource.success(newData))
                         }
                     }
                 }
                 is ApiErrorResponse -> {
                     onFetchFailed()
                     result.addSource(dbSource) { newData ->
-                        setValue(Resource.Error(response.errorMessage, newData))
+                        setValue(Resource.error(response.errorMessage, newData))
                     }
                 }
             }
         }
     }
 
-    protected open fun onFetchFailed() {
-        result.setValue(Resource.Error("error"))
-    }
+    protected open fun onFetchFailed() {}
 
     fun asLiveData() = result as LiveData<Resource<ResultType>>
 

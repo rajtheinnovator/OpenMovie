@@ -2,7 +2,6 @@ package me.abhishekraj.openmovie.data.remote
 
 import androidx.lifecycle.LiveData
 import me.abhishekraj.openmovie.data.ApiResponse
-import me.abhishekraj.openmovie.data.model.Movie
 import me.abhishekraj.openmovie.data.model.MovieDetail
 import me.abhishekraj.openmovie.data.model.MovieList
 import retrofit2.Call
@@ -38,7 +37,7 @@ interface MovieDbService {
         @Path("movie_type") movieType: String,
         @Query("api_key") apiKey: String,
         @Query("page") pageNumber: Int
-    ): LiveData<ApiResponse<List<Movie>>>
+    ): LiveData<ApiResponse<MovieList>>
 
     @GET("3/discover/movie/{movie_type}")
     fun discoverMoviesByFilters(
