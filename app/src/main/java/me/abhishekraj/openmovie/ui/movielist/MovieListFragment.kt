@@ -52,6 +52,20 @@ class MovieListFragment : Fragment(), MoviesListAdapter.MovieClickListener {
         title = arguments?.getString("title")
     }
 
+    override fun onResume() {
+        super.onResume()
+        movieListBinding.toolbar.setTitle(title)
+        if (title.equals("Popular Movies")) {
+            title = "Popular Movies"
+            movieListBinding.included.bnvMenuOption.menu.findItem(R.id.navigation_popular).isChecked = true
+            fetchMovies("popular")
+        } else {
+            title = "Top Rated Movies"
+            movieListBinding.included.bnvMenuOption.menu.findItem(R.id.navigation_top_rated).isChecked = true
+            fetchMovies("top_rated")
+        }
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         movieListBinding = DataBindingUtil.inflate(
             inflater, R.layout.app_bar_main, container, false
@@ -64,17 +78,6 @@ class MovieListFragment : Fragment(), MoviesListAdapter.MovieClickListener {
             //set default movie type to be popular
             movieListBinding.toolbar.setTitle("Popular Movies")
             title = "Popular Movies"
-        } else {
-            movieListBinding.toolbar.setTitle(title)
-            if (title.equals("Popular Movies")) {
-                title = "Popular Movies"
-                movieListBinding.included.bnvMenuOption.menu.findItem(R.id.navigation_popular).isChecked = true
-                fetchMovies("popular")
-            } else {
-                title = "Top Rated Movies"
-                movieListBinding.included.bnvMenuOption.menu.findItem(R.id.navigation_top_rated).isChecked = true
-                fetchMovies("top_rated")
-            }
         }
 
         movieListBinding.included.bnvMenuOption.setOnNavigationItemSelectedListener(object :
