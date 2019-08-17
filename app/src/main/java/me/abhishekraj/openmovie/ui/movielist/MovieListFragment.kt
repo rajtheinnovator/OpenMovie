@@ -8,19 +8,35 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.transaction
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import me.abhishekraj.openmovie.R
 import me.abhishekraj.openmovie.data.model.Movie
 import me.abhishekraj.openmovie.databinding.MovieListBinding
+import me.abhishekraj.openmovie.di.Injectable
 import me.abhishekraj.openmovie.ui.moviedetails.MovieDetailsFragment
+import javax.inject.Inject
 
 /**
  * Created by Abhishek Raj on 6/19/2019.
  */
 
-class MovieListFragment : Fragment(), MoviesListAdapter.MovieClickListener {
+class MovieListFragment : Fragment(), MoviesListAdapter.MovieClickListener, Injectable {
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+//    private val movieListViewModel: MovieListViewModel by lazy {
+//        ViewModelProviders.of(requireActivity()).get(MovieListViewModel::class.java)
+//    }
+
+    private val movieListViewModel by viewModels<MovieListViewModel> { viewModelFactory }
+
+    private lateinit var moviesAdapter: MoviesListAdapter
+    private lateinit var movieListBinding: MovieListBinding
+    private var title: String? = null
 
     override fun onMovieClicked(chosenMovie: Movie) {
         movieListViewModel.chosenMovie = chosenMovie
@@ -34,14 +50,6 @@ class MovieListFragment : Fragment(), MoviesListAdapter.MovieClickListener {
             addToBackStack("MovieListFragment")
         }
     }
-
-    private val movieListViewModel: MovieListViewModel by lazy {
-        ViewModelProviders.of(requireActivity()).get(MovieListViewModel::class.java)
-    }
-
-    private lateinit var moviesAdapter: MoviesListAdapter
-    private lateinit var movieListBinding: MovieListBinding
-    private var title: String? = null
 
     init {
         retainInstance = true
@@ -129,11 +137,11 @@ class MovieListFragment : Fragment(), MoviesListAdapter.MovieClickListener {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
         //When using livedata inside movieListBinding implementation, we should specify the lifecycle owner
         movieListBinding.lifecycleOwner = this.viewLifecycleOwner
         fetchMovies("popular")
     }
+
 
     companion object {
         private const val TAG = "MovieListFragment"
