@@ -9,16 +9,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.transaction
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import me.abhishekraj.openmovie.R
 import me.abhishekraj.openmovie.data.model.Movie
 import me.abhishekraj.openmovie.data.model.VideosResult
 import me.abhishekraj.openmovie.databinding.FragmentDetailsBinding
+import me.abhishekraj.openmovie.di.Injectable
 import me.abhishekraj.openmovie.ui.movielist.MovieListFragment
 import me.abhishekraj.openmovie.utils.UIState
+import javax.inject.Inject
 
-class MovieDetailsFragment : Fragment(), MovieTrailerAdapter.TrailerClickListener {
+class MovieDetailsFragment : Fragment(), MovieTrailerAdapter.TrailerClickListener, Injectable {
 
     override fun onTrailerClicked(clickedTrailer: VideosResult, movieTrailer: ArrayList<VideosResult>?) {
         fragmentManager?.transaction {
@@ -35,9 +38,10 @@ class MovieDetailsFragment : Fragment(), MovieTrailerAdapter.TrailerClickListene
     private lateinit var fragmentDetailsBinding: FragmentDetailsBinding
     private var movie: Movie? = null
 
-    private val movieDetailsViewModel: MovieDetailsViewModel by lazy {
-        ViewModelProviders.of(requireActivity()).get(MovieDetailsViewModel::class.java)
-    }
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    private val movieDetailsViewModel by viewModels<MovieDetailsViewModel> { viewModelFactory }
 
     private lateinit var movieReviewsAdapter: MovieReviewsAdapter
     private lateinit var movieCastAdapter: MovieCastAdapter

@@ -8,35 +8,32 @@ import androidx.annotation.NonNull
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import me.abhishekraj.openmovie.BuildConfig
-import me.abhishekraj.openmovie.data.local.AppDatabase
 import me.abhishekraj.openmovie.data.local.MovieDao
 import me.abhishekraj.openmovie.data.model.Movie
 import me.abhishekraj.openmovie.data.model.MovieDetail
 import me.abhishekraj.openmovie.data.model.MovieList
-import me.abhishekraj.openmovie.data.remote.APIClient
 import me.abhishekraj.openmovie.data.remote.MovieDbService
 import me.abhishekraj.openmovie.utils.thereIsConnection
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.concurrent.Executor
+import javax.inject.Inject
+import javax.inject.Singleton
 
 
 /**
  * Created by Abhishek Raj on 8/10/2019.
  */
 
-object MoviesRepository {
+@Singleton
+class MoviesRepository @Inject constructor(
+    private val appExecutors: AppExecutors,
+    private val movieDao: MovieDao,
+    private val movieDbService: MovieDbService,
+    private val application: Application
+) {
 
     private val _movieDetails = MutableLiveData<MovieDetail>()
-    var application: Application? = null
-    var moviesRepository: MoviesRepository? = null
-
-    private var movieDbService: MovieDbService? = null
-    private var movieDao: MovieDao? = null
-    private var diskExecutor: Executor? = null
-    private var networkExecutor: Executor? = null
-    private lateinit var appExecutors: AppExecutors
 
     /*
     We need a mutable live data here, so that we can modify it, but we
@@ -55,43 +52,30 @@ object MoviesRepository {
     val liveDataOfListOfMovie: LiveData<List<Movie>>
         get() = _listOfMovie
 
-    fun getInstance(application: Application): MoviesRepository {
-        this.application = application
-        if (moviesRepository == null) {
-            moviesRepository = MoviesRepository
-            movieDao = AppDatabase.getInstance(application).movieDao()
-            //create the service
-            appExecutors = AppExecutors.instance
-            movieDbService = APIClient.client.create(MovieDbService::class.java)
-            diskExecutor = AppExecutors.instance.diskIO
-            networkExecutor = AppExecutors.instance.networkIO
-        }
-        return moviesRepository!!
-    }
-
     fun fetchLiveDataOfMovieList(movieType: String) {
         /*
         https://api.themoviedb.org/3/movie?api_key=user-api-key&page=1
         */
-        diskExecutor!!.execute {
-            val data = movieDao?.loadAllMoviesListDataByMovieType(movieType)
+
+        appExecutors.diskIO().execute {
+            val data = movieDao.loadAllMoviesListDataByMovieType(movieType)
             Handler(Looper.getMainLooper()).post {
                 _listOfMovie.value = data
             }
         }
-        if (thereIsConnection(application!!)) {
-            networkExecutor?.execute {
-                movieDbService!!.getMovieList(movieType, BuildConfig.MOVIE_DB_API_KEY, 1)
+        if (thereIsConnection(application)) {
+            appExecutors.networkIO().execute {
+                movieDbService.getMovieList(movieType, BuildConfig.MOVIE_DB_API_KEY, 1)
                     .enqueue(object : Callback<MovieList> {
                         override fun onResponse(@NonNull call: Call<MovieList>, @NonNull response: Response<MovieList>) {
                             if (response.body() != null) {
                                 _listOfMovie.value = response.body()!!.results
                                 Log.e("my_tag", "repo _listOfMovie: " + response.body()!!.results.size)
-                                diskExecutor?.execute {
-                                    movieDao?.deleteAllByType(movieType)
+                                appExecutors.diskIO().execute {
+                                    movieDao.deleteAllByType(movieType)
                                     for (movie in response.body()!!.results) {
                                         movie.movieType = movieType
-                                        movieDao!!.insertMovie(movie)
+                                        movieDao.insertMovie(movie)
                                     }
                                 }
                             }
@@ -114,18 +98,18 @@ object MoviesRepository {
             override fun saveCallResult(item: MovieList) {
                 for (movie in item.results) {
                     movie.movieType = movieType
-                    movieDao!!.insertMovie(movie)
+                    movieDao.insertMovie(movie)
                 }
             }
 
             override fun shouldFetch(data: MovieList?): Boolean {
-                return thereIsConnection(application!!)
+                return thereIsConnection(application)
             }
 
             override fun loadFromDb() = getMovieListLiveData(movieType)
 
             override fun createCall() =
-                movieDbService?.getMovieListResponse(movieType, BuildConfig.MOVIE_DB_API_KEY, 1)!!
+                movieDbService.getMovieListResponse(movieType, BuildConfig.MOVIE_DB_API_KEY, 1)
 
             override fun onFetchFailed() {
                 getMovieListLiveData(movieType)
@@ -135,9 +119,9 @@ object MoviesRepository {
 
 
     private fun getMovieListLiveData(movieType: String): LiveData<MovieList> {
-        diskExecutor?.execute {
+        appExecutors.diskIO().execute {
             val movieList = MovieList()
-            val movieListFromDatabase = movieDao?.loadAllMoviesListDataByMovieType(movieType)
+            val movieListFromDatabase = movieDao.loadAllMoviesListDataByMovieType(movieType)
             if (movieListFromDatabase != null) {
                 movieList.results = movieListFromDatabase
             }
@@ -149,9 +133,9 @@ object MoviesRepository {
     }
 
     fun getMovieDetails(movieId: String) {
-        diskExecutor?.execute {
-            movieDbService?.getMovieDetails(movieId, BuildConfig.MOVIE_DB_API_KEY, "videos,reviews,credits")
-                ?.enqueue(object : Callback<MovieDetail> {
+        appExecutors.diskIO().execute {
+            movieDbService.getMovieDetails(movieId, BuildConfig.MOVIE_DB_API_KEY, "videos,reviews,credits")
+                .enqueue(object : Callback<MovieDetail> {
                     override fun onResponse(@NonNull call: Call<MovieDetail>, @NonNull response: Response<MovieDetail>) {
                         Log.e(TAG, "getMovieDetails onResponse: " + response)
                         if (response.body() != null) {
@@ -166,5 +150,7 @@ object MoviesRepository {
         }
     }
 
-    private const val TAG = "MoviesRepository"
+    companion object {
+        private const val TAG = "MoviesRepository"
+    }
 }

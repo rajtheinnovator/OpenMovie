@@ -1,4 +1,4 @@
-package me.abhishekraj.openmovie.data
+package me.abhishekraj.openmovie.data.remote
 
 /**
  * Created by Abhishek Raj on 8/10/2019.
@@ -12,6 +12,7 @@ import java.util.regex.Pattern
  * Common class used by API responses.
  * @param <T> the type of the response object
 </T> */
+
 @Suppress("unused") // T is used in extending classes
 sealed class ApiResponse<T> {
     companion object {

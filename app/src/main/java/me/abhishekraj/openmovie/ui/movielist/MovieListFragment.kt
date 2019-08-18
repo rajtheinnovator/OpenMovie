@@ -28,10 +28,6 @@ class MovieListFragment : Fragment(), MoviesListAdapter.MovieClickListener, Inje
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-//    private val movieListViewModel: MovieListViewModel by lazy {
-//        ViewModelProviders.of(requireActivity()).get(MovieListViewModel::class.java)
-//    }
-
     private val movieListViewModel by viewModels<MovieListViewModel> { viewModelFactory }
 
     private lateinit var moviesAdapter: MoviesListAdapter

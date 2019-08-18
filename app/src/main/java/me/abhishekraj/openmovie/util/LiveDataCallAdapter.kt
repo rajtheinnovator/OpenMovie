@@ -1,6 +1,7 @@
-package me.abhishekraj.openmovie.data
+package me.abhishekraj.openmovie.util
 
 import androidx.lifecycle.LiveData
+import me.abhishekraj.openmovie.data.remote.ApiResponse
 import retrofit2.Call
 import retrofit2.CallAdapter
 import retrofit2.Callback

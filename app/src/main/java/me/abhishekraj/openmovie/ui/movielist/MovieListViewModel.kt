@@ -7,20 +7,21 @@ import me.abhishekraj.openmovie.data.MoviesRepository
 import me.abhishekraj.openmovie.data.Resource
 import me.abhishekraj.openmovie.data.model.Movie
 import me.abhishekraj.openmovie.data.model.MovieList
+import javax.inject.Inject
 
-class MovieListViewModel(application: Application) : AndroidViewModel(application) {
+class MovieListViewModel @Inject constructor(application: Application, private val moviesRepository: MoviesRepository) :
+    AndroidViewModel(application) {
 
-
-    val moviesList: LiveData<List<Movie>>?
-        get() = MoviesRepository.getInstance(getApplication()).liveDataOfListOfMovie
+    private val moviesList: LiveData<List<Movie>>?
+        get() = moviesRepository.liveDataOfListOfMovie
 
     fun fetchMovies(type: String): LiveData<List<Movie>>? {
-        MoviesRepository.getInstance(getApplication()).fetchLiveDataOfMovieList(type)
+        moviesRepository.fetchLiveDataOfMovieList(type)
         return moviesList
     }
 
     fun fetchMoviesResource(type: String): LiveData<Resource<MovieList>> {
-        return MoviesRepository.getInstance(getApplication()).loadListOfMovies(type)
+        return moviesRepository.loadListOfMovies(type)
     }
 
     var chosenMovie: Movie? = null

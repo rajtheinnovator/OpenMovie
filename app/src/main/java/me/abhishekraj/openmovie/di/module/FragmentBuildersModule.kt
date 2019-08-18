@@ -1,4 +1,4 @@
-package me.abhishekraj.openmovie.di
+package me.abhishekraj.openmovie.di.module
 
 import dagger.Module
 import dagger.android.ContributesAndroidInjector

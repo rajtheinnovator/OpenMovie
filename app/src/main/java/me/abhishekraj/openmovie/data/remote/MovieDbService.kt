@@ -1,7 +1,6 @@
 package me.abhishekraj.openmovie.data.remote
 
 import androidx.lifecycle.LiveData
-import me.abhishekraj.openmovie.data.ApiResponse
 import me.abhishekraj.openmovie.data.model.MovieDetail
 import me.abhishekraj.openmovie.data.model.MovieList
 import retrofit2.Call

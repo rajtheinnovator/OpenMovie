@@ -1,6 +1,6 @@
 package me.abhishekraj.openmovie.data.remote
 
-import me.abhishekraj.openmovie.data.LiveDataCallAdapterFactory
+import me.abhishekraj.openmovie.util.LiveDataCallAdapterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

@@ -4,10 +4,10 @@ import android.app.Application
 import androidx.room.Room
 import dagger.Module
 import dagger.Provides
-import me.abhishekraj.openmovie.data.LiveDataCallAdapterFactory
 import me.abhishekraj.openmovie.data.local.AppDatabase
 import me.abhishekraj.openmovie.data.local.MovieDao
 import me.abhishekraj.openmovie.data.remote.MovieDbService
+import me.abhishekraj.openmovie.util.LiveDataCallAdapterFactory
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton

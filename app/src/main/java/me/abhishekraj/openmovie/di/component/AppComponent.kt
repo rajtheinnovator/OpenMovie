@@ -5,8 +5,8 @@ import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule
 import me.abhishekraj.openmovie.OpenMovieApp
-import me.abhishekraj.openmovie.di.MainActivityModule
 import me.abhishekraj.openmovie.di.module.AppModule
+import me.abhishekraj.openmovie.di.module.MainActivityModule
 import javax.inject.Singleton
 
 /**
