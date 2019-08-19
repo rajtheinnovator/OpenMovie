@@ -18,6 +18,7 @@ import me.abhishekraj.openmovie.data.model.VideosResult
 import me.abhishekraj.openmovie.databinding.FragmentDetailsBinding
 import me.abhishekraj.openmovie.di.Injectable
 import me.abhishekraj.openmovie.ui.movielist.MovieListFragment
+import me.abhishekraj.openmovie.util.autoCleared
 import me.abhishekraj.openmovie.utils.UIState
 import javax.inject.Inject
 
@@ -35,7 +36,10 @@ class MovieDetailsFragment : Fragment(), MovieTrailerAdapter.TrailerClickListene
         }
     }
 
-    private lateinit var fragmentDetailsBinding: FragmentDetailsBinding
+    private var movieReviewsAdapter by autoCleared<MovieReviewsAdapter>()
+
+    private var fragmentDetailsBinding by autoCleared<FragmentDetailsBinding>()
+
     private var movie: Movie? = null
 
     @Inject
@@ -43,7 +47,6 @@ class MovieDetailsFragment : Fragment(), MovieTrailerAdapter.TrailerClickListene
 
     private val movieDetailsViewModel by viewModels<MovieDetailsViewModel> { viewModelFactory }
 
-    private lateinit var movieReviewsAdapter: MovieReviewsAdapter
     private lateinit var movieCastAdapter: MovieCastAdapter
     private lateinit var movieTrailerAdapter: MovieTrailerAdapter
     private var title: String? = null

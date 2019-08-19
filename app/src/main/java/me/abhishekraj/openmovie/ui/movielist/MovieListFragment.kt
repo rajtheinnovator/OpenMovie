@@ -17,6 +17,7 @@ import me.abhishekraj.openmovie.data.model.Movie
 import me.abhishekraj.openmovie.databinding.MovieListBinding
 import me.abhishekraj.openmovie.di.Injectable
 import me.abhishekraj.openmovie.ui.moviedetails.MovieDetailsFragment
+import me.abhishekraj.openmovie.util.autoCleared
 import javax.inject.Inject
 
 /**
@@ -30,8 +31,10 @@ class MovieListFragment : Fragment(), MoviesListAdapter.MovieClickListener, Inje
 
     private val movieListViewModel by viewModels<MovieListViewModel> { viewModelFactory }
 
-    private lateinit var moviesAdapter: MoviesListAdapter
-    private lateinit var movieListBinding: MovieListBinding
+    private var moviesAdapter by autoCleared<MoviesListAdapter>()
+
+    private var movieListBinding by autoCleared<MovieListBinding>()
+
     private var title: String? = null
 
     override fun onMovieClicked(chosenMovie: Movie) {
