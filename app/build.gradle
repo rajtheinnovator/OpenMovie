@@ -16,6 +16,7 @@ android {
         applicationId "me.abhishekraj.openmovie"
         minSdkVersion 17
         targetSdkVersion 28
+        multiDexEnabled true
         versionCode major * 10000 + minor * 100 + patch
         versionName "${major}.${minor}.${patch}"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -36,6 +37,14 @@ android {
         enabled = true
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 
 //for handling Parcelable
@@ -87,8 +96,10 @@ dependencies {
     implementation "android.arch.paging:runtime:$paging_version"
 
     //Navigation
-    implementation "android.arch.navigation:navigation-fragment-ktx:$navigation_version"
-    implementation "android.arch.navigation:navigation-ui-ktx:$navigation_version"
+    implementation "androidx.navigation:navigation-runtime-ktx:2.2.0-alpha01"
+    implementation "androidx.navigation:navigation-ui-ktx:2.2.0-alpha01"
+    implementation "androidx.navigation:navigation-fragment-ktx:2.2.0-alpha01"
+    //implementation "android.arch.navigation:navigation-ui-ktx:$navigation_version"
 
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:$retrofit_version") {

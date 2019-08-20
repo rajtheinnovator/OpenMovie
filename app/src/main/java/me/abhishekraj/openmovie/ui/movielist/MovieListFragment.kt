@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.transaction
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -16,7 +15,6 @@ import me.abhishekraj.openmovie.R
 import me.abhishekraj.openmovie.data.model.Movie
 import me.abhishekraj.openmovie.databinding.MovieListBinding
 import me.abhishekraj.openmovie.di.Injectable
-import me.abhishekraj.openmovie.ui.moviedetails.MovieDetailsFragment
 import me.abhishekraj.openmovie.util.autoCleared
 import javax.inject.Inject
 
@@ -38,16 +36,16 @@ class MovieListFragment : Fragment(), MoviesListAdapter.MovieClickListener, Inje
     private var title: String? = null
 
     override fun onMovieClicked(chosenMovie: Movie) {
-        movieListViewModel.chosenMovie = chosenMovie
-        fragmentManager?.transaction {
-            val movieDetailsFragment = MovieDetailsFragment()
-            val bundle = Bundle()
-            bundle.putParcelable("movie", chosenMovie)
-            bundle.putString("title", movieListBinding.toolbar.title.toString())
-            movieDetailsFragment.arguments = bundle
-            replace(R.id.fl_fragment_container, movieDetailsFragment)
-            addToBackStack("MovieListFragment")
-        }
+//        movieListViewModel.chosenMovie = chosenMovie
+//        fragmentManager?.transaction {
+//            val movieDetailsFragment = MovieDetailsFragment()
+//            val bundle = Bundle()
+//            bundle.putParcelable("movie", chosenMovie)
+//            bundle.putString("title", movieListBinding.toolbar.title.toString())
+//            movieDetailsFragment.arguments = bundle
+//            replace(R.id.fl_fragment_container, movieDetailsFragment)
+//            addToBackStack("MovieListFragment")
+//        }
     }
 
     init {
