@@ -13,16 +13,16 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import me.abhishekraj.openmovie.R
 import me.abhishekraj.openmovie.data.model.Movie
-import me.abhishekraj.openmovie.databinding.MovieListBinding
+import me.abhishekraj.openmovie.databinding.PopularMoviesBinding
 import me.abhishekraj.openmovie.di.Injectable
 import me.abhishekraj.openmovie.util.autoCleared
 import javax.inject.Inject
 
 /**
- * Created by Abhishek Raj on 6/19/2019.
+ * Created by Abhishek Raj on 8/21/2019.
  */
 
-class MovieListFragment : Fragment(), MovieClickListener, Injectable {
+class PopularMoviesFragment : Fragment(), MovieClickListener, Injectable {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -31,7 +31,7 @@ class MovieListFragment : Fragment(), MovieClickListener, Injectable {
 
     private var moviesAdapter by autoCleared<MoviesListAdapter>()
 
-    private var movieListBinding by autoCleared<MovieListBinding>()
+    private var movieListBinding by autoCleared<PopularMoviesBinding>()
 
     private var title: String? = null
 
@@ -62,18 +62,24 @@ class MovieListFragment : Fragment(), MovieClickListener, Injectable {
         movieListBinding.toolbar.setTitle(title)
         if (title.equals("Popular Movies")) {
             title = "Popular Movies"
-            movieListBinding.included.bnvMenuOption.menu.findItem(R.id.navigation_popular).isChecked = true
+            movieListBinding.included.bnvMenuOption.menu.findItem(R.id.navigation_popular)
+                .isChecked = true
             fetchMovies("popular")
         } else {
             title = "Top Rated Movies"
-            movieListBinding.included.bnvMenuOption.menu.findItem(R.id.navigation_top_rated).isChecked = true
+            movieListBinding.included.bnvMenuOption.menu.findItem(R.id.navigation_top_rated)
+                .isChecked = true
             fetchMovies("top_rated")
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         movieListBinding = DataBindingUtil.inflate(
-            inflater, R.layout.app_bar_main, container, false
+            inflater, R.layout.fragment_popular_movie, container, false
         )
 
         //Set adapter, divider and default animator to the recycler view
@@ -141,6 +147,6 @@ class MovieListFragment : Fragment(), MovieClickListener, Injectable {
 
 
     companion object {
-        private const val TAG = "MovieListFragment"
+        private const val TAG = "PopularMoviesFragment"
     }
 }

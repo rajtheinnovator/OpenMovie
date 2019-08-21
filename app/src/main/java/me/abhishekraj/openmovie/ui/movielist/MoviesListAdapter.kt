@@ -56,10 +56,6 @@ class MoviesListAdapter(
         }
     }
 
-    interface MovieClickListener {
-        fun onMovieClicked(chosenMovie: Movie)
-    }
-
     fun onNewData(newData: ArrayList<Movie>) {
         val diffResult = DiffUtil.calculateDiff(MyDiffUtilCallback(newData, movieList))
         movieList.clear()

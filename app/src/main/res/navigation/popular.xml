@@ -2,18 +2,17 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/popular"
-    app:startDestination="@id/movieListFragment">
-
+    app:startDestination="@id/popularMoviesFragment">
     <fragment
-        android:id="@+id/movieListFragment"
-        android:name="me.abhishekraj.openmovie.ui.movielist.MovieListFragment"
-        android:label="MovieListFragment">
+        android:id="@+id/popularMoviesFragment"
+        android:name="me.abhishekraj.openmovie.ui.movielist.PopularMoviesFragment"
+        android:label="PopularMoviesFragment">
         <action
-            android:id="@+id/action_movieListFragment_to_movieDetailsFragment"
-            app:destination="@id/movieDetailsFragment" />
+            android:id="@+id/action_popularMoviesFragment_to_movieDetailsFragment2"
+            app:destination="@id/movieDetailsFragment2" />
     </fragment>
     <fragment
-        android:id="@+id/movieDetailsFragment"
+        android:id="@+id/movieDetailsFragment2"
         android:name="me.abhishekraj.openmovie.ui.moviedetails.MovieDetailsFragment"
         android:label="MovieDetailsFragment" />
 </navigation>
