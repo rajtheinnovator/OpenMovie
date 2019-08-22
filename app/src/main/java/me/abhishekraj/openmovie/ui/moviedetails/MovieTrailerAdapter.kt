@@ -15,7 +15,7 @@ import java.util.*
  * Created by Abhishek Raj on 6/26/2019.
  */
 
-class MovieTrailerAdapter() :
+class MovieTrailerAdapter(val movieType: String) :
     RecyclerView.Adapter<MovieTrailerAdapter.MovieTrailerViewHolder>() {
 
     var movieTrailer: List<VideosResult>? = null
@@ -30,13 +30,23 @@ class MovieTrailerAdapter() :
     override fun onBindViewHolder(holder: MovieTrailerViewHolder, position: Int) {
         holder.bind(movieTrailer?.get(position), movieTrailer)
         holder.binding.root.setOnClickListener {
-            val bundle = Bundle()
-            bundle.putParcelable("selectedVideo", movieTrailer?.get(position))
-            bundle.putParcelableArrayList("videos", movieTrailer as ArrayList<VideosResult>?)
-            holder.binding.root.findNavController().navigate(
-                R.id.action_movieDetailsFragment2_to_movieTrailerPlayerFragment,
-                bundle
-            )
+            if (movieType.equals("top_rated")) {
+                val bundle = Bundle()
+                bundle.putParcelable("selectedVideo", movieTrailer?.get(position))
+                bundle.putParcelableArrayList("videos", movieTrailer as ArrayList<VideosResult>?)
+                holder.binding.root.findNavController().navigate(
+                    R.id.action_movieDetailsFragment_to_movieTrailerPlayerFragment,
+                    bundle
+                )
+            } else {
+                val bundle = Bundle()
+                bundle.putParcelable("selectedVideo", movieTrailer?.get(position))
+                bundle.putParcelableArrayList("videos", movieTrailer as ArrayList<VideosResult>?)
+                holder.binding.root.findNavController().navigate(
+                    R.id.action_movieDetailsFragment2_to_movieTrailerPlayerFragment2,
+                    bundle
+                )
+            }
         }
     }
 

@@ -16,12 +16,14 @@ import me.abhishekraj.openmovie.data.model.VideosResult
 
 class MovieTrailerPlayerAdapter(
     var videoIds: ArrayList<VideosResult>?,
-    private val lifecycle: Lifecycle
+    private val lifecycle: Lifecycle,
+    private val trailerClicked: TrailerClicked?
 ) : RecyclerView.Adapter<MovieTrailerPlayerAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.item_play_movie_trailer, parent, false)
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_play_movie_trailer, parent, false)
 
         val youTubePlayerView = view.findViewById<YouTubePlayerView>(R.id.youtube_player_view)
         lifecycle.addObserver(youTubePlayerView)
@@ -30,7 +32,7 @@ class MovieTrailerPlayerAdapter(
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        viewHolder.cueVideo(videoIds?.get(position)!!)
+        viewHolder.cueVideo(videoIds?.get(position)!!, trailerClicked)
 
     }
 
@@ -53,13 +55,22 @@ class MovieTrailerPlayerAdapter(
             })
         }
 
-        fun cueVideo(videoId: VideosResult) {
+        fun cueVideo(
+            videoId: VideosResult,
+            trailerClicked: TrailerClicked?
+        ) {
             currentVideoId = videoId.key
 
             if (youTubePlayer == null)
                 return
 
             youTubePlayer!!.cueVideo(videoId.key!!, 0f)
+            trailerClicked?.onTrailerCued(videoId.name ?: "Trailers")
+
         }
+    }
+
+    interface TrailerClicked {
+        fun onTrailerCued(name: String)
     }
 }

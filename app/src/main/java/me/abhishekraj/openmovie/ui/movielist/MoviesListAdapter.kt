@@ -24,7 +24,7 @@ class MoviesListAdapter(val movieType: String) :
             if (movieType.equals("top_rated")) {
                 val bundle = Bundle()
                 bundle.putParcelable("movie", movieList.get(position))
-                bundle.putString("title", "Top Rated Movies")
+                bundle.putString("type", "top_rated")
                 holder.binding.root.findNavController().navigate(
                     R.id.action_topRatedMoviesFragment_to_movieDetailsFragment,
                     bundle
@@ -32,7 +32,7 @@ class MoviesListAdapter(val movieType: String) :
             } else if (movieType.equals("popular")) {
                 val bundle = Bundle()
                 bundle.putParcelable("movie", movieList.get(position))
-                bundle.putString("title", "Top Rated Movies")
+                bundle.putString("type", "popular")
                 holder.binding.root.findNavController().navigate(
                     R.id.action_popularMoviesFragment_to_movieDetailsFragment2,
                     bundle

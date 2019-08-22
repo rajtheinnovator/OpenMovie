@@ -27,6 +27,7 @@ class MovieDetailsFragment : Fragment(), Injectable {
     private var fragmentDetailsBinding by autoCleared<FragmentDetailsBinding>()
 
     private var movie: Movie? = null
+    private lateinit var movieType: String
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -38,12 +39,13 @@ class MovieDetailsFragment : Fragment(), Injectable {
 
     override fun onResume() {
         super.onResume()
-        (activity as AppCompatActivity).supportActionBar!!.setTitle(movie?.originalTitle)
+        (activity as AppCompatActivity).supportActionBar!!.title = movie?.originalTitle
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         movie = arguments?.getParcelable("movie")
+        movieType = arguments?.getString("type") ?: "popular"
     }
 
     override fun onCreateView(
@@ -71,7 +73,7 @@ class MovieDetailsFragment : Fragment(), Injectable {
             adapter = movieCastAdapter
         }
 
-        movieTrailerAdapter = MovieTrailerAdapter()
+        movieTrailerAdapter = MovieTrailerAdapter(movieType)
         with(fragmentDetailsBinding.rvMovieTrailers) {
             itemAnimator = null
             adapter = movieTrailerAdapter

@@ -13,14 +13,13 @@
     </fragment>
     <fragment
         android:id="@+id/movieDetailsFragment"
-        android:name="me.abhishekraj.openmovie.ui.moviedetails.MovieDetailsFragment"
-        android:label="Movie Details">
+        android:name="me.abhishekraj.openmovie.ui.moviedetails.MovieDetailsFragment">
         <action
-            android:id="@+id/action_movieDetailsFragment_to_movieTrailerPlayerFragment2"
-            app:destination="@id/movieTrailerPlayerFragment2" />
+            android:id="@+id/action_movieDetailsFragment_to_movieTrailerPlayerFragment"
+            app:destination="@id/movieTrailerPlayerFragment" />
     </fragment>
     <fragment
-        android:id="@+id/movieTrailerPlayerFragment2"
+        android:id="@+id/movieTrailerPlayerFragment"
         android:name="me.abhishekraj.openmovie.ui.moviedetails.MovieTrailerPlayerFragment"
         android:label="MovieTrailerPlayerFragment" />
 </navigation>
