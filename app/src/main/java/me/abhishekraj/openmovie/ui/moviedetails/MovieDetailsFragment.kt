@@ -13,7 +13,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import me.abhishekraj.openmovie.R
 import me.abhishekraj.openmovie.data.model.Movie
-import me.abhishekraj.openmovie.data.model.VideosResult
 import me.abhishekraj.openmovie.databinding.FragmentDetailsBinding
 import me.abhishekraj.openmovie.di.Injectable
 import me.abhishekraj.openmovie.util.autoCleared
@@ -21,22 +20,7 @@ import me.abhishekraj.openmovie.utils.UIState
 import javax.inject.Inject
 
 
-class MovieDetailsFragment : Fragment(), MovieTrailerAdapter.TrailerClickListener, Injectable {
-
-    override fun onTrailerClicked(
-        clickedTrailer: VideosResult,
-        movieTrailer: ArrayList<VideosResult>?
-    ) {
-//        fragmentManager?.transaction {
-//            val movieDetailsFragment = MovieTrailerPlayerFragment()
-//            val bundle = Bundle()
-//            bundle.putParcelable("selectedVideo", clickedTrailer)
-//            bundle.putParcelableArrayList("videos", movieTrailer)
-//            movieDetailsFragment.arguments = bundle
-//            replace(R.id.fl_fragment_container, movieDetailsFragment)
-//            addToBackStack("MovieListFragment")
-//        }
-    }
+class MovieDetailsFragment : Fragment(), Injectable {
 
     private var movieReviewsAdapter by autoCleared<MovieReviewsAdapter>()
 
@@ -49,8 +33,13 @@ class MovieDetailsFragment : Fragment(), MovieTrailerAdapter.TrailerClickListene
 
     private val movieDetailsViewModel by viewModels<MovieDetailsViewModel> { viewModelFactory }
 
-    private lateinit var movieCastAdapter: MovieCastAdapter
-    private lateinit var movieTrailerAdapter: MovieTrailerAdapter
+    private var movieCastAdapter by autoCleared<MovieCastAdapter>()
+    private var movieTrailerAdapter by autoCleared<MovieTrailerAdapter>()
+
+    override fun onResume() {
+        super.onResume()
+        (activity as AppCompatActivity).supportActionBar!!.setTitle(movie?.originalTitle)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,7 +71,7 @@ class MovieDetailsFragment : Fragment(), MovieTrailerAdapter.TrailerClickListene
             adapter = movieCastAdapter
         }
 
-        movieTrailerAdapter = MovieTrailerAdapter(this)
+        movieTrailerAdapter = MovieTrailerAdapter()
         with(fragmentDetailsBinding.rvMovieTrailers) {
             itemAnimator = null
             adapter = movieTrailerAdapter

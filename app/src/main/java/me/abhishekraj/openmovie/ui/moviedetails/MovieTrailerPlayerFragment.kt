@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import me.abhishekraj.openmovie.R
@@ -34,8 +33,6 @@ class MovieTrailerPlayerFragment : Fragment() {
         fragmentPlayMovieTrailerBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_movie_trailer_player, container, false)
 
-        //These are for making up button work.
-        (requireActivity() as AppCompatActivity).setSupportActionBar(fragmentPlayMovieTrailerBinding.toolbarMovieDetail)
         setHasOptionsMenu(true)
         movieTrailerPlayerAdapter = MovieTrailerPlayerAdapter(movieTrailers, this.lifecycle)
         with(fragmentPlayMovieTrailerBinding.rvPlayMovieTrailer) {

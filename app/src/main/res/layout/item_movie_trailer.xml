@@ -17,9 +17,6 @@
 
         <import type="me.abhishekraj.openmovie.utils.BindingUtils" />
 
-        <variable
-            name="trailerItemClick"
-            type="me.abhishekraj.openmovie.ui.moviedetails.MovieTrailerAdapter.TrailerClickListener" />
     </data>
 
     <LinearLayout
@@ -28,7 +25,6 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="4dp"
         android:gravity="center_horizontal"
-        android:onClick="@{() ->  trailerItemClick.onTrailerClicked(video, videoList)}"
         android:orientation="vertical"
         android:paddingTop="2dp">
 

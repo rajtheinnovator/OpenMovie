@@ -1,8 +1,10 @@
 package me.abhishekraj.openmovie.ui.moviedetails
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import me.abhishekraj.openmovie.R
 import me.abhishekraj.openmovie.data.model.VideosResult
@@ -13,7 +15,7 @@ import java.util.*
  * Created by Abhishek Raj on 6/26/2019.
  */
 
-class MovieTrailerAdapter(private val trailerClickListener: TrailerClickListener) :
+class MovieTrailerAdapter() :
     RecyclerView.Adapter<MovieTrailerAdapter.MovieTrailerViewHolder>() {
 
     var movieTrailer: List<VideosResult>? = null
@@ -25,21 +27,30 @@ class MovieTrailerAdapter(private val trailerClickListener: TrailerClickListener
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieTrailerViewHolder =
         MovieTrailerViewHolder.from(parent)
 
-    override fun onBindViewHolder(holder: MovieTrailerViewHolder, position: Int) =
-        holder.bind(movieTrailer?.get(position), trailerClickListener, movieTrailer)
+    override fun onBindViewHolder(holder: MovieTrailerViewHolder, position: Int) {
+        holder.bind(movieTrailer?.get(position), movieTrailer)
+        holder.binding.root.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putParcelable("selectedVideo", movieTrailer?.get(position))
+            bundle.putParcelableArrayList("videos", movieTrailer as ArrayList<VideosResult>?)
+            holder.binding.root.findNavController().navigate(
+                R.id.action_movieDetailsFragment2_to_movieTrailerPlayerFragment,
+                bundle
+            )
+        }
+    }
 
     override fun getItemCount(): Int {
         //If list is null, return 0, otherwise return the size of the list
         return movieTrailer?.size ?: 0
     }
 
-    class MovieTrailerViewHolder(val binding: ItemMovieTrailer) : RecyclerView.ViewHolder(binding.root) {
+    class MovieTrailerViewHolder(val binding: ItemMovieTrailer) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(
             currentVideo: VideosResult?,
-            trailerClickListener: TrailerClickListener,
             movieTrailerList: List<VideosResult>?
         ) {
-            binding.trailerItemClick = trailerClickListener
             binding.video = currentVideo
             binding.videoList = movieTrailerList as ArrayList<VideosResult>?
             binding.executePendingBindings()
@@ -56,7 +67,4 @@ class MovieTrailerAdapter(private val trailerClickListener: TrailerClickListener
         }
     }
 
-    interface TrailerClickListener {
-        fun onTrailerClicked(clickedTrailer: VideosResult, movieTrailer: ArrayList<VideosResult>?)
-    }
 }

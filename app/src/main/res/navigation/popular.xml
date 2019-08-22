@@ -14,5 +14,13 @@
     <fragment
         android:id="@+id/movieDetailsFragment2"
         android:name="me.abhishekraj.openmovie.ui.moviedetails.MovieDetailsFragment"
-        android:label="Movie Details" />
+        android:label="Movie Details">
+        <action
+            android:id="@+id/action_movieDetailsFragment2_to_movieTrailerPlayerFragment"
+            app:destination="@id/movieTrailerPlayerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/movieTrailerPlayerFragment"
+        android:name="me.abhishekraj.openmovie.ui.moviedetails.MovieTrailerPlayerFragment"
+        android:label="MovieTrailerPlayerFragment" />
 </navigation>
