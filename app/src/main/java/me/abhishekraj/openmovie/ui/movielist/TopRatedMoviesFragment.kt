@@ -2,7 +2,6 @@ package me.abhishekraj.openmovie.ui.movielist
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -10,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import me.abhishekraj.openmovie.R
 import me.abhishekraj.openmovie.data.model.Movie
 import me.abhishekraj.openmovie.databinding.TopRatedMoviesBinding
@@ -33,8 +31,6 @@ class TopRatedMoviesFragment : Fragment(), MovieClickListener, Injectable {
 
     private var movieListBinding by autoCleared<TopRatedMoviesBinding>()
 
-    private var title: String? = null
-
     override fun onMovieClicked(chosenMovie: Movie) {
 //        movieListViewModel.chosenMovie = chosenMovie
 //        fragmentManager?.transaction {
@@ -52,27 +48,6 @@ class TopRatedMoviesFragment : Fragment(), MovieClickListener, Injectable {
         retainInstance = true
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        title = arguments?.getString("title")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        movieListBinding.toolbar.setTitle(title)
-        if (title.equals("Popular Movies")) {
-            title = "Popular Movies"
-            movieListBinding.included.bnvMenuOption.menu.findItem(R.id.navigation_popular)
-                .isChecked = true
-            fetchMovies("popular")
-        } else {
-            title = "Top Rated Movies"
-            movieListBinding.included.bnvMenuOption.menu.findItem(R.id.navigation_top_rated)
-                .isChecked = true
-            fetchMovies("top_rated")
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -84,34 +59,6 @@ class TopRatedMoviesFragment : Fragment(), MovieClickListener, Injectable {
 
         //Set adapter, divider and default animator to the recycler view
         moviesAdapter = MoviesListAdapter(this)
-
-        if (title == null) {
-            //set default movie type to be popular
-            movieListBinding.toolbar.setTitle("Popular Movies")
-            title = "Popular Movies"
-        }
-
-        movieListBinding.included.bnvMenuOption.setOnNavigationItemSelectedListener(object :
-            BottomNavigationView.OnNavigationItemSelectedListener {
-            override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
-                when (menuItem.getItemId()) {
-                    R.id.navigation_popular -> {
-                        movieListBinding.toolbar.setTitle("Popular Movies")
-                        fetchMovies("popular")
-                        return true
-                    }
-                    R.id.navigation_top_rated -> {
-                        movieListBinding.toolbar.setTitle("Top Rated Movies")
-                        fetchMovies("top_rated")
-                        return true
-                    }
-                    else -> {
-                        movieListBinding.toolbar.setTitle("Popular Movies")
-                    }
-                }
-                return false
-            }
-        })
 
         with(movieListBinding.included.rvMovieList) {
             itemAnimator = null
@@ -142,7 +89,7 @@ class TopRatedMoviesFragment : Fragment(), MovieClickListener, Injectable {
         super.onActivityCreated(savedInstanceState)
         //When using livedata inside movieListBinding implementation, we should specify the lifecycle owner
         movieListBinding.lifecycleOwner = this.viewLifecycleOwner
-        fetchMovies("popular")
+        fetchMovies("top_rated")
     }
 
 

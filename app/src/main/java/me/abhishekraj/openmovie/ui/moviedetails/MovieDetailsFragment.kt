@@ -17,7 +17,6 @@ import me.abhishekraj.openmovie.data.model.Movie
 import me.abhishekraj.openmovie.data.model.VideosResult
 import me.abhishekraj.openmovie.databinding.FragmentDetailsBinding
 import me.abhishekraj.openmovie.di.Injectable
-import me.abhishekraj.openmovie.ui.movielist.MovieListFragment
 import me.abhishekraj.openmovie.util.autoCleared
 import me.abhishekraj.openmovie.utils.UIState
 import javax.inject.Inject
@@ -65,14 +64,14 @@ class MovieDetailsFragment : Fragment(), MovieTrailerAdapter.TrailerClickListene
         setHasOptionsMenu(true)
 
         fragmentDetailsBinding.ibBack.setOnClickListener {
-            fragmentManager?.transaction {
-                val movieListFragment = MovieListFragment()
-                val bundle = Bundle()
-                bundle.putString("title", title)
-                movieListFragment.arguments = bundle
-                replace(R.id.fl_fragment_container, movieListFragment)
-                addToBackStack("null")
-            }
+            //            fragmentManager?.transaction {
+//                val movieListFragment = MovieListFragment()
+//                val bundle = Bundle()
+//                bundle.putString("title", title)
+//                movieListFragment.arguments = bundle
+//                replace(R.id.fl_fragment_container, movieListFragment)
+//                addToBackStack("null")
+//            }
         }
 
         movieReviewsAdapter = MovieReviewsAdapter()

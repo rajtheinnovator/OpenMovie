@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/popular"
+    android:id="@+id/navigation_popular"
     app:startDestination="@id/popularMoviesFragment">
     <fragment
         android:id="@+id/popularMoviesFragment"
         android:name="me.abhishekraj.openmovie.ui.movielist.PopularMoviesFragment"
-        android:label="PopularMoviesFragment">
+        android:label="Popular Movies">
         <action
             android:id="@+id/action_popularMoviesFragment_to_movieDetailsFragment2"
             app:destination="@id/movieDetailsFragment2" />
@@ -14,5 +14,5 @@
     <fragment
         android:id="@+id/movieDetailsFragment2"
         android:name="me.abhishekraj.openmovie.ui.moviedetails.MovieDetailsFragment"
-        android:label="MovieDetailsFragment" />
+        android:label="Movie Details" />
 </navigation>

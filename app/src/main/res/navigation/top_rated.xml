@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/top_rated"
+    android:id="@+id/navigation_top_rated"
     app:startDestination="@id/topRatedMoviesFragment">
     <fragment
         android:id="@+id/topRatedMoviesFragment"
         android:name="me.abhishekraj.openmovie.ui.movielist.TopRatedMoviesFragment"
-        android:label="TopRatedMoviesFragment">
+        android:label="Top Rated Movies">
         <action
             android:id="@+id/action_topRatedMoviesFragment_to_movieDetailsFragment"
             app:destination="@id/movieDetailsFragment" />
@@ -14,5 +14,5 @@
     <fragment
         android:id="@+id/movieDetailsFragment"
         android:name="me.abhishekraj.openmovie.ui.moviedetails.MovieDetailsFragment"
-        android:label="MovieDetailsFragment" />
+        android:label="Movie Details" />
 </navigation>

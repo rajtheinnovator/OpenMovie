@@ -7,25 +7,13 @@
         android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_above="@id/bnv_menu_option"
             android:id="@+id/rv_movie_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#ffffff"
             android:layout_gravity="center_horizontal"
+            android:background="#ffffff"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:spanCount="2" />
-
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bnv_menu_option"
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_gravity="center_vertical|center_horizontal"
-            android:background="@color/colorPrimaryLight"
-            app:itemTextColor="@android:color/black"
-            app:menu="@menu/movies_category_menu" />
     </RelativeLayout>
 
 </layout>
