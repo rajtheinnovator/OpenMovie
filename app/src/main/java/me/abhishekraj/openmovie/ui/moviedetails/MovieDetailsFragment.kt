@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.transaction
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -21,18 +20,22 @@ import me.abhishekraj.openmovie.util.autoCleared
 import me.abhishekraj.openmovie.utils.UIState
 import javax.inject.Inject
 
+
 class MovieDetailsFragment : Fragment(), MovieTrailerAdapter.TrailerClickListener, Injectable {
 
-    override fun onTrailerClicked(clickedTrailer: VideosResult, movieTrailer: ArrayList<VideosResult>?) {
-        fragmentManager?.transaction {
-            val movieDetailsFragment = MovieTrailerPlayerFragment()
-            val bundle = Bundle()
-            bundle.putParcelable("selectedVideo", clickedTrailer)
-            bundle.putParcelableArrayList("videos", movieTrailer)
-            movieDetailsFragment.arguments = bundle
-            replace(R.id.fl_fragment_container, movieDetailsFragment)
-            addToBackStack("MovieListFragment")
-        }
+    override fun onTrailerClicked(
+        clickedTrailer: VideosResult,
+        movieTrailer: ArrayList<VideosResult>?
+    ) {
+//        fragmentManager?.transaction {
+//            val movieDetailsFragment = MovieTrailerPlayerFragment()
+//            val bundle = Bundle()
+//            bundle.putParcelable("selectedVideo", clickedTrailer)
+//            bundle.putParcelableArrayList("videos", movieTrailer)
+//            movieDetailsFragment.arguments = bundle
+//            replace(R.id.fl_fragment_container, movieDetailsFragment)
+//            addToBackStack("MovieListFragment")
+//        }
     }
 
     private var movieReviewsAdapter by autoCleared<MovieReviewsAdapter>()
@@ -48,31 +51,23 @@ class MovieDetailsFragment : Fragment(), MovieTrailerAdapter.TrailerClickListene
 
     private lateinit var movieCastAdapter: MovieCastAdapter
     private lateinit var movieTrailerAdapter: MovieTrailerAdapter
-    private var title: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         movie = arguments?.getParcelable("movie")
-        title = arguments?.getString("title")
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        fragmentDetailsBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_details, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        fragmentDetailsBinding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_details, container, false)
 
-        //These are for making up button work.
-        (requireActivity() as AppCompatActivity).setSupportActionBar(fragmentDetailsBinding.toolbarMovieDetail)
         setHasOptionsMenu(true)
 
-        fragmentDetailsBinding.ibBack.setOnClickListener {
-            //            fragmentManager?.transaction {
-//                val movieListFragment = MovieListFragment()
-//                val bundle = Bundle()
-//                bundle.putString("title", title)
-//                movieListFragment.arguments = bundle
-//                replace(R.id.fl_fragment_container, movieListFragment)
-//                addToBackStack("null")
-//            }
-        }
+        (activity as AppCompatActivity).supportActionBar!!.setTitle(movie?.originalTitle)
 
         movieReviewsAdapter = MovieReviewsAdapter()
         with(fragmentDetailsBinding.rvMovieReviews) {
@@ -92,6 +87,7 @@ class MovieDetailsFragment : Fragment(), MovieTrailerAdapter.TrailerClickListene
             itemAnimator = null
             adapter = movieTrailerAdapter
         }
+
         return fragmentDetailsBinding.root
     }
 
@@ -104,19 +100,20 @@ class MovieDetailsFragment : Fragment(), MovieTrailerAdapter.TrailerClickListene
     }
 
     private fun fetchMovieDetails(movieId: String) {
-        movieDetailsViewModel.fetchMovieDetails(movieId)?.observe(viewLifecycleOwner, Observer { movieDetails ->
-            if (movieDetails != null) {
-                movieDetailsViewModel.setUiState(UIState.SUCCESS)
-                fragmentDetailsBinding.movieDetail = movieDetails
-                fragmentDetailsBinding.movie = movie
-                fragmentDetailsBinding.itemMovieDetail.movieDetail = movieDetails
-                fragmentDetailsBinding.itemMovieDetail.movie = movie
-                fragmentDetailsBinding.viewModel = movieDetailsViewModel
-                movieReviewsAdapter.reviewResult = movieDetails.reviews?.reviewResult
-                movieCastAdapter.movieCast = movieDetails.credits?.cast
-                movieTrailerAdapter.movieTrailer = movieDetails.videos?.videosResult
-            }
-        })
+        movieDetailsViewModel.fetchMovieDetails(movieId)
+            ?.observe(viewLifecycleOwner, Observer { movieDetails ->
+                if (movieDetails != null) {
+                    movieDetailsViewModel.setUiState(UIState.SUCCESS)
+                    fragmentDetailsBinding.movieDetail = movieDetails
+                    fragmentDetailsBinding.movie = movie
+                    fragmentDetailsBinding.itemMovieDetail.movieDetail = movieDetails
+                    fragmentDetailsBinding.itemMovieDetail.movie = movie
+                    fragmentDetailsBinding.viewModel = movieDetailsViewModel
+                    movieReviewsAdapter.reviewResult = movieDetails.reviews?.reviewResult
+                    movieCastAdapter.movieCast = movieDetails.credits?.cast
+                    movieTrailerAdapter.movieTrailer = movieDetails.videos?.videosResult
+                }
+            })
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

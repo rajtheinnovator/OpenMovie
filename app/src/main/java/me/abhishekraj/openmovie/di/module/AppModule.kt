@@ -16,7 +16,6 @@ import javax.inject.Singleton
  * Created by Abhishek Raj on 8/15/2019.
  */
 
-
 @Module(includes = [ViewModelModule::class])
 class AppModule {
     @Singleton

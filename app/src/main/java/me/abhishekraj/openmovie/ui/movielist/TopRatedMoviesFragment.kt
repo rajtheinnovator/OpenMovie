@@ -20,7 +20,7 @@ import javax.inject.Inject
  * Created by Abhishek Raj on 8/21/2019.
  */
 
-class TopRatedMoviesFragment : Fragment(), MovieClickListener, Injectable {
+class TopRatedMoviesFragment : Fragment(), Injectable {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -30,19 +30,6 @@ class TopRatedMoviesFragment : Fragment(), MovieClickListener, Injectable {
     private var moviesAdapter by autoCleared<MoviesListAdapter>()
 
     private var movieListBinding by autoCleared<TopRatedMoviesBinding>()
-
-    override fun onMovieClicked(chosenMovie: Movie) {
-//        movieListViewModel.chosenMovie = chosenMovie
-//        fragmentManager?.transaction {
-//            val movieDetailsFragment = MovieDetailsFragment()
-//            val bundle = Bundle()
-//            bundle.putParcelable("movie", chosenMovie)
-//            bundle.putString("title", movieListBinding.toolbar.title.toString())
-//            movieDetailsFragment.arguments = bundle
-//            replace(R.id.fl_fragment_container, movieDetailsFragment)
-//            addToBackStack("MovieListFragment")
-//        }
-    }
 
     init {
         retainInstance = true
@@ -58,9 +45,9 @@ class TopRatedMoviesFragment : Fragment(), MovieClickListener, Injectable {
         )
 
         //Set adapter, divider and default animator to the recycler view
-        moviesAdapter = MoviesListAdapter(this)
+        moviesAdapter = MoviesListAdapter("top_rated")
 
-        with(movieListBinding.included.rvMovieList) {
+        with(movieListBinding.rvMovieList) {
             itemAnimator = null
             adapter = moviesAdapter
 
@@ -69,10 +56,10 @@ class TopRatedMoviesFragment : Fragment(), MovieClickListener, Injectable {
         return movieListBinding.root
     }
 
-    private fun fetchMovies(movieType: String) {
+    private fun fetchMovies() {
         moviesAdapter.movieList = ArrayList()
         //Claim the list from the view model and observe the results
-        movieListViewModel.fetchMoviesResource(movieType).observe(
+        movieListViewModel.fetchMoviesResource("top_rated").observe(
             viewLifecycleOwner,
             Observer { resource ->
                 val movies = resource.data?.results
@@ -89,7 +76,7 @@ class TopRatedMoviesFragment : Fragment(), MovieClickListener, Injectable {
         super.onActivityCreated(savedInstanceState)
         //When using livedata inside movieListBinding implementation, we should specify the lifecycle owner
         movieListBinding.lifecycleOwner = this.viewLifecycleOwner
-        fetchMovies("top_rated")
+        fetchMovies()
     }
 
 
