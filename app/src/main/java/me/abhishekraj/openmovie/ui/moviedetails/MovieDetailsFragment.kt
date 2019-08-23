@@ -22,13 +22,6 @@ import javax.inject.Inject
 
 class MovieDetailsFragment : Fragment(), Injectable {
 
-    private var movieReviewsAdapter by autoCleared<MovieReviewsAdapter>()
-
-    private var fragmentDetailsBinding by autoCleared<FragmentDetailsBinding>()
-
-    private var movie: Movie? = null
-    private lateinit var movieType: String
-
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -36,6 +29,13 @@ class MovieDetailsFragment : Fragment(), Injectable {
 
     private var movieCastAdapter by autoCleared<MovieCastAdapter>()
     private var movieTrailerAdapter by autoCleared<MovieTrailerAdapter>()
+
+    private var movieReviewsAdapter by autoCleared<MovieReviewsAdapter>()
+
+    private var fragmentDetailsBinding by autoCleared<FragmentDetailsBinding>()
+
+    private var movie: Movie? = null
+    private lateinit var movieType: String
 
     override fun onResume() {
         super.onResume()

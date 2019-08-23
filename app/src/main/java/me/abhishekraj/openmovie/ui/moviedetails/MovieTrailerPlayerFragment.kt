@@ -1,7 +1,6 @@
 package me.abhishekraj.openmovie.ui.moviedetails
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -12,6 +11,7 @@ import androidx.fragment.app.Fragment
 import me.abhishekraj.openmovie.R
 import me.abhishekraj.openmovie.data.model.VideosResult
 import me.abhishekraj.openmovie.databinding.FragmentPlayMovieTrailer
+import me.abhishekraj.openmovie.util.autoCleared
 
 /**
  * Created by Abhishek Raj on 6/26/2019.
@@ -20,16 +20,17 @@ import me.abhishekraj.openmovie.databinding.FragmentPlayMovieTrailer
 class MovieTrailerPlayerFragment : Fragment(), MovieTrailerPlayerAdapter.TrailerClicked {
 
     override fun onTrailerCued(name: String) {
-        Log.d("my___tags", "name: " + name)
         (activity as AppCompatActivity).supportActionBar!!.title = name
     }
 
-    private lateinit var fragmentPlayMovieTrailerBinding: FragmentPlayMovieTrailer
     private var clickedTrailer: VideosResult? = null
     private var movieTrailers: ArrayList<VideosResult>? = null
     private var trailerClicked: MovieTrailerPlayerAdapter.TrailerClicked? = null
 
-    private lateinit var movieTrailerPlayerAdapter: MovieTrailerPlayerAdapter
+    private var fragmentPlayMovieTrailerBinding by autoCleared<FragmentPlayMovieTrailer>()
+
+    private var movieTrailerPlayerAdapter by autoCleared<MovieTrailerPlayerAdapter>()
+
 
     override fun onResume() {
         super.onResume()

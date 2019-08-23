@@ -4,8 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.RecyclerView
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import me.abhishekraj.openmovie.R
 import me.abhishekraj.openmovie.data.model.VideosResult
@@ -40,20 +41,9 @@ class MovieTrailerPlayerAdapter(
         return videoIds?.size!!
     }
 
-    class ViewHolder(private val youTubePlayerView: YouTubePlayerView) :
+    class ViewHolder(private var youTubePlayerView: YouTubePlayerView) :
         RecyclerView.ViewHolder(youTubePlayerView) {
-        private var youTubePlayer: YouTubePlayer? = null
         private var currentVideoId: String? = null
-
-        init {
-
-            youTubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
-                override fun onReady(youTubePlayer: YouTubePlayer) {
-                    this@ViewHolder.youTubePlayer = youTubePlayer
-                    this@ViewHolder.youTubePlayer!!.cueVideo(currentVideoId!!, 0f)
-                }
-            })
-        }
 
         fun cueVideo(
             videoId: VideosResult,
@@ -61,12 +51,58 @@ class MovieTrailerPlayerAdapter(
         ) {
             currentVideoId = videoId.key
 
-            if (youTubePlayer == null)
-                return
 
-            youTubePlayer!!.cueVideo(videoId.key!!, 0f)
-            trailerClicked?.onTrailerCued(videoId.name ?: "Trailers")
+            youTubePlayerView.addYouTubePlayerListener(object : YouTubePlayerListener {
+                override fun onApiChange(youTubePlayer: YouTubePlayer) {
 
+                }
+
+                override fun onCurrentSecond(youTubePlayer: YouTubePlayer, second: Float) {
+                }
+
+                override fun onError(
+                    youTubePlayer: YouTubePlayer,
+                    error: PlayerConstants.PlayerError
+                ) {
+                }
+
+                override fun onPlaybackQualityChange(
+                    youTubePlayer: YouTubePlayer,
+                    playbackQuality: PlayerConstants.PlaybackQuality
+                ) {
+                }
+
+                override fun onPlaybackRateChange(
+                    youTubePlayer: YouTubePlayer,
+                    playbackRate: PlayerConstants.PlaybackRate
+                ) {
+                }
+
+                override fun onReady(youTubePlayer: YouTubePlayer) {
+                    youTubePlayer.cueVideo(videoId.key!!, 0f)
+                }
+
+                override fun onStateChange(
+                    youTubePlayer: YouTubePlayer,
+                    state: PlayerConstants.PlayerState
+                ) {
+                    if (state.equals(PlayerConstants.PlayerState.PLAYING)) {
+                        trailerClicked?.onTrailerCued(videoId.name!!)
+                    }
+                }
+
+                override fun onVideoDuration(youTubePlayer: YouTubePlayer, duration: Float) {
+                }
+
+                override fun onVideoId(youTubePlayer: YouTubePlayer, videoId: String) {
+                }
+
+                override fun onVideoLoadedFraction(
+                    youTubePlayer: YouTubePlayer,
+                    loadedFraction: Float
+                ) {
+                }
+            })
         }
     }
 
