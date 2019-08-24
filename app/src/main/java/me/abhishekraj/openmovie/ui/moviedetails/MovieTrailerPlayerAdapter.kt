@@ -6,6 +6,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.RecyclerView
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import me.abhishekraj.openmovie.R
@@ -18,7 +19,8 @@ import me.abhishekraj.openmovie.data.model.VideosResult
 class MovieTrailerPlayerAdapter(
     var videoIds: ArrayList<VideosResult>?,
     private val lifecycle: Lifecycle,
-    private val trailerClicked: TrailerClicked?
+    private val trailerClicked: TrailerClicked?,
+    private val selectedTrailer: VideosResult?
 ) : RecyclerView.Adapter<MovieTrailerPlayerAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -33,7 +35,7 @@ class MovieTrailerPlayerAdapter(
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        viewHolder.cueVideo(videoIds?.get(position)!!, trailerClicked)
+        viewHolder.cueVideo(videoIds?.get(position)!!, trailerClicked, selectedTrailer)
 
     }
 
@@ -47,10 +49,16 @@ class MovieTrailerPlayerAdapter(
 
         fun cueVideo(
             videoId: VideosResult,
-            trailerClicked: TrailerClicked?
+            trailerClicked: TrailerClicked?,
+            selectedTrailer: VideosResult?
         ) {
             currentVideoId = videoId.key
 
+            youTubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+                override fun onReady(youTubePlayer: YouTubePlayer) {
+                    youTubePlayer.loadVideo(selectedTrailer?.key!!, 0f)
+                }
+            })
 
             youTubePlayerView.addYouTubePlayerListener(object : YouTubePlayerListener {
                 override fun onApiChange(youTubePlayer: YouTubePlayer) {
@@ -79,7 +87,7 @@ class MovieTrailerPlayerAdapter(
                 }
 
                 override fun onReady(youTubePlayer: YouTubePlayer) {
-                    youTubePlayer.cueVideo(videoId.key!!, 0f)
+                    youTubePlayer.cueVideo(currentVideoId!!, 0f)
                 }
 
                 override fun onStateChange(

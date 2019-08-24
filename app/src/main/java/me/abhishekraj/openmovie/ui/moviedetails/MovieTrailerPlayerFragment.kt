@@ -23,7 +23,7 @@ class MovieTrailerPlayerFragment : Fragment(), MovieTrailerPlayerAdapter.Trailer
         (activity as AppCompatActivity).supportActionBar!!.title = name
     }
 
-    private var clickedTrailer: VideosResult? = null
+    private var selectedTrailer: VideosResult? = null
     private var movieTrailers: ArrayList<VideosResult>? = null
     private var trailerClicked: MovieTrailerPlayerAdapter.TrailerClicked? = null
 
@@ -34,13 +34,13 @@ class MovieTrailerPlayerFragment : Fragment(), MovieTrailerPlayerAdapter.Trailer
 
     override fun onResume() {
         super.onResume()
-        (activity as AppCompatActivity).supportActionBar!!.title = clickedTrailer?.name
+        (activity as AppCompatActivity).supportActionBar!!.title = selectedTrailer?.name
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         trailerClicked = this
-        clickedTrailer = arguments?.getParcelable("selectedVideo")
+        selectedTrailer = arguments?.getParcelable("selectedVideo")
         movieTrailers = arguments?.getParcelableArrayList("videos")
     }
 
@@ -59,7 +59,12 @@ class MovieTrailerPlayerFragment : Fragment(), MovieTrailerPlayerAdapter.Trailer
 
         setHasOptionsMenu(true)
         movieTrailerPlayerAdapter =
-            MovieTrailerPlayerAdapter(movieTrailers, this.lifecycle, trailerClicked)
+            MovieTrailerPlayerAdapter(
+                movieTrailers,
+                this.lifecycle,
+                trailerClicked,
+                selectedTrailer
+            )
         with(fragmentPlayMovieTrailerBinding.rvPlayMovieTrailer) {
             itemAnimator = null
             adapter = movieTrailerPlayerAdapter
