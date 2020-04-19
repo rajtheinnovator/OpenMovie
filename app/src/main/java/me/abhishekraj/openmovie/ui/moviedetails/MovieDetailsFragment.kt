@@ -1,10 +1,7 @@
 package me.abhishekraj.openmovie.ui.moviedetails
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -19,6 +16,9 @@ import me.abhishekraj.openmovie.util.autoCleared
 import me.abhishekraj.openmovie.utils.UIState
 import javax.inject.Inject
 
+//Navigation help: https://github.com/GabrielSamojlo/navigation-single-activity
+//https://stackoverflow.com/questions/9469174/set-theme-for-a-fragment
+//https://stackoverflow.com/questions/53061213/navigation-architecture-component-how-to-set-change-custom-back-or-hamburger-i
 
 class MovieDetailsFragment : Fragment(), Injectable {
 

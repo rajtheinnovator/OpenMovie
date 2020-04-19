@@ -12,6 +12,7 @@ import me.abhishekraj.openmovie.data.local.MovieDao
 import me.abhishekraj.openmovie.data.model.Movie
 import me.abhishekraj.openmovie.data.model.MovieDetail
 import me.abhishekraj.openmovie.data.model.MovieList
+import me.abhishekraj.openmovie.data.remote.CoroutinesPlants
 import me.abhishekraj.openmovie.data.remote.MovieDbService
 import me.abhishekraj.openmovie.utils.thereIsConnection
 import retrofit2.Call
@@ -152,5 +153,20 @@ class MoviesRepository @Inject constructor(
 
     companion object {
         private const val TAG = "MoviesRepository"
+    }
+
+    fun getPlantDetails() {
+        appExecutors.diskIO().execute {
+            movieDbService.getAllPlants()
+                .enqueue(object : Callback<List<CoroutinesPlants>> {
+                    override fun onResponse(@NonNull call: Call<List<CoroutinesPlants>>, @NonNull response: Response<List<CoroutinesPlants>>) {
+                        Log.e(TAG, "getMovieDetails onResponse: " + response)
+                    }
+
+                    override fun onFailure(@NonNull call: Call<List<CoroutinesPlants>>, @NonNull throwable: Throwable) {
+
+                    }
+                })
+        }
     }
 }

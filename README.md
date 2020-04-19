@@ -70,6 +70,11 @@ where `your_movie_db_api_key` is the api key that you can get after signing up o
 * [Santosh Dhakal's medium](https://medium.com/@laaptu9)
 * [That Missing Guide: How to use Dagger2](https://medium.com/@Zhuinden/that-missing-guide-how-to-use-dagger2-ef116fbea97)
 
+## Navigation Help:
+
+*  [https://github.com/GabrielSamojlo/navigation-single-activity](https://github.com/GabrielSamojlo/navigation-single-activity)
+  
+
 ## NetworkBoundResource:
 
 * [https://github.com/AkshayChordiya/android-arch-news-sample/blob/master/app/src/main/java/com/akshay/newsapp/repo/NewsRepository.kt](https://github.com/AkshayChordiya/android-arch-news-sample/blob/master/app/src/main/java/com/akshay/newsapp/repo/NewsRepository.kt)

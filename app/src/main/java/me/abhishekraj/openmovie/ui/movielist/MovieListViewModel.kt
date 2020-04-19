@@ -24,5 +24,9 @@ class MovieListViewModel @Inject constructor(application: Application, private v
         return moviesRepository.loadListOfMovies(type)
     }
 
+    fun getAllPlantsData(){
+        moviesRepository.getPlantDetails()
+    }
+
     var chosenMovie: Movie? = null
 }

@@ -1,6 +1,11 @@
 package me.abhishekraj.openmovie.data.remote
 
+import android.os.Parcelable
 import androidx.lifecycle.LiveData
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import kotlinx.android.parcel.Parcelize
 import me.abhishekraj.openmovie.data.model.MovieDetail
 import me.abhishekraj.openmovie.data.model.MovieList
 import retrofit2.Call
@@ -61,4 +66,25 @@ interface MovieDbService {
         @Query("api_key") apiKey: String,
         @Query("append_to_response") retrieveExtraDetails: String
     ): Call<MovieDetail>
+
+    @GET("googlecodelabs/kotlin-coroutines/master/advanced-coroutines-codelab/sunflower/src/main/assets/plants.json")
+    fun getAllPlants() : Call<List<CoroutinesPlants>>
+
+    @GET("rajtheinnovator/OpenMovie/blob/test_github_raw_content/app/src/main/assets/assets/custom_plant_sort_order.json")
+    suspend fun getCustomPlantSortOrder() : List<CoroutinesPlants>
+
+}
+
+@Parcelize
+@Entity(tableName = "plants")
+data class CoroutinesPlants(
+    @PrimaryKey @ColumnInfo(name = "id")
+    var plantId: String ="",
+    var name: String="",
+    var description: String="",
+    var growZoneNumber: Int=0,
+    var wateringInterval: Int = 7, // how often the plant should be watered, in days
+    var imageUrl: String = ""
+) : Parcelable {
+    override fun toString() = name
 }

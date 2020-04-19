@@ -76,7 +76,7 @@ class TopRatedMoviesFragment : Fragment(), Injectable {
         super.onActivityCreated(savedInstanceState)
         //When using livedata inside movieListBinding implementation, we should specify the lifecycle owner
         movieListBinding.lifecycleOwner = this.viewLifecycleOwner
-        fetchMovies()
+       // fetchMovies()
     }
 
 

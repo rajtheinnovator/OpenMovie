@@ -17,6 +17,7 @@ import me.abhishekraj.openmovie.R
  *
  * This sample is a workaround until the Navigation Component supports multiple back stacks.
  */
+
 fun BottomNavigationView.setupWithNavController(
     navGraphIds: List<Int>,
     fragmentManager: FragmentManager,
